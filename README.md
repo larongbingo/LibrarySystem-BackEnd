@@ -4,15 +4,21 @@ Project in Management Information System (DCIT101)
 Its made of 2 servers. Public API and React App.
 
 ## Stack
-* Front End
+* Front End (library-web-app)
     * React
         * React Router v4
         * React Bootstrap
-* Back End
+    * Axios
+* Back End (library-api)
     * Express
     * GraphQL
         * Express-Graphql
     * Sequelize
+    * Morgan (Logging HTTP Requests)
+    * CORS (Allowing CORS Requests)
+    * Rimraf (Deleting Build Files)
+
+Both servers use Babel for transpiling.
 
 ## Contributors
 * Renz Christen Yeomer A. Pagulayan
