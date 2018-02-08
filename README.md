@@ -18,7 +18,7 @@ Its made of 2 servers. Public API and React App.
     * CORS (Allowing CORS Requests)
     * Rimraf (Deleting Build Files)
 
-Both servers use Babel for transpiling.
+Both servers use Babel for transpiling and NodeJS for server language.
 
 ## Contributors
 * Renz Christen Yeomer A. Pagulayan
