@@ -35,7 +35,7 @@ Both servers use Babel for transpiling.
 
 ## Contributors
 * Renz Christen Yeomer A. Pagulayan
-* Michael Casas
+* Michael Casals
 * Joshua Albert Vilanueva
 * Sache Aclan
 * Mark Louie Cipriano
