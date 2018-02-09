@@ -4,10 +4,10 @@
  */
 
 import { STRING } from "sequelize";
+import { hashSync } from "bcrypt-nodejs";
 import DB from "../dbConn";
-import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from "constants";
 
-export default DB.define("users", {
+const Users = DB.define("users", {
     firstName: {
         type: STRING,
         allowNull: false
@@ -32,4 +32,12 @@ export default DB.define("users", {
         type: STRING,
         allowNull: false
     }
-})
+}, {
+    hooks: {
+        beforeCreate: (user, options) => {
+            user.password = hashSync(user.password);
+        }
+    }
+});
+
+export default Users;
