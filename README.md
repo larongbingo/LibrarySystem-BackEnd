@@ -5,19 +5,22 @@ Its made of 2 servers. Public API and React App.
 
 ## Stack
 * Front End (library-web-app)
-    * React
-        * React Router v4
-        * React Bootstrap
-    * Axios
+    * NodeJS
+        * React
+            * React Router v4
+            * React Bootstrap
+        * Axios
 * Back End (library-api)
-    * Express
-    * GraphQL
-        * Express-Graphql
-    * Sequelize
-    * Morgan (Logging HTTP Requests)
-    * CORS (Allowing CORS Requests)
-    * Rimraf (Deleting Build Files)
-
+    * NodeJS (Server Language)
+        * Express (Routing)
+        * GraphQL
+            * Express-Graphql (Middleware for GraphQL APIs)
+        * Sequelize (ORM)
+        * Morgan (Logging HTTP Requests)
+        * CORS (Allowing CORS Requests)
+        * Rimraf (Deleting Build Files)
+    * MySQL
+    
 Both servers use Babel for transpiling and NodeJS for server language.
 
 ## Contributors
