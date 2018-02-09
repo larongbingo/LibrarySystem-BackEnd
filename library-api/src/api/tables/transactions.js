@@ -27,7 +27,7 @@ export default new GraphQLObjectType({
                 description: "The remark or comment of the transaction",
                 type: GraphQLString,
                 resolve(transaction) {
-                    return transaction.transactionRemark;
+                    return transaction.transactionRemarks;
                 }
             },
             userId: {
