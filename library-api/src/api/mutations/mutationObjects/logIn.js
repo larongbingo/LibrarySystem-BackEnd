@@ -2,11 +2,13 @@ import {
     GraphQLString,
     GraphQLNonNull
 } from "graphql"
+import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import { hashSync, compareSync } from "bcrypt-nodejs";
+import JWT from "jsonwebtoken";
 
 export default {
-    type: GraphQLString,
+    type: GraphQLJSON,
     description: "Returns a string with token if the given credentials are valid",
     args: {
         username: {
@@ -26,10 +28,22 @@ export default {
         })
         .then(user => {
             if(typeof user !== 'undefined' && user !== null && compareSync(args.password, user.password)) {
-                return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},ita:${Date.now()}}`);
+                return {
+                    success: true,
+                    ita: Date.now(),
+                    hash: JWT.sign({
+                        username: user.username,
+                        id: user.id
+                    }, "This is a test for the super secret key")
+                }
+                //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},ita:${Date.now()}}`);
             }
             else {
-                return(`{loggedIn:false,ita:${Date.now()}}`);
+                return {
+                    success: false,
+                    ita: Date.now()
+                }
+                //return(`{loggedIn:false,ita:${Date.now()}}`);
             }
         })
     }
