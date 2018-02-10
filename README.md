@@ -22,6 +22,8 @@ You must install the following to run the server:
         * GraphQL (RESTful API)
             * Express-Graphql (Middleware for handling queries of GraphQL APIs)
             * Graphiql (Middleware for testing GraphQL APIs)
+            * GraphQL-Type-JSON (A custom GraphQL Data Type that lets routes send and recieve JSON)
+            * JWT (Tokens for POST Requests)
         * Sequelize (ORM)
         * Morgan (Logging HTTP Requests)
         * CORS (Allowing CORS Requests)
