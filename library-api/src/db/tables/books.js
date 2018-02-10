@@ -3,7 +3,7 @@
  * Defines the table that represents and stores all books
  */
 
-import { STRING } from "sequelize";
+import { STRING, BOOLEAN } from "sequelize";
 import DB from "../dbConn";
 
 export default DB.define("books", {
@@ -18,5 +18,9 @@ export default DB.define("books", {
     ISBN: {
         type: STRING,
         allowNull: false
+    },
+    isBorrowed: {
+        type: BOOLEAN,
+        allowNull: true
     }
 });

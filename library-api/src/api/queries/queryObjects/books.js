@@ -1,7 +1,8 @@
 import { 
     GraphQLList,
     GraphQLInt,
-    GraphQLString
+    GraphQLString,
+    GraphQLBoolean
 } from "graphql";
 import BooksObject from "../../tables/books";
 import DB from "../../../db/dbMap";
@@ -25,6 +26,10 @@ export default {
         ISBN: {
             description: "The ISBN of the book",
             type: GraphQLString
+        },
+        isBorrowed: {
+            description: "Indicates if the book has been borrowed by a user",
+            type: GraphQLBoolean
         }
     },
     resolve(root, args) {

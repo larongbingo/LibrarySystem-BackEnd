@@ -17,7 +17,8 @@ DB.sync({force: true}).then(() => {
         return BooksTable.create({
             title: "Testing Book",
             author: "Testing Author",
-            ISBN: "TESTING-ISBN-TEST"
+            ISBN: "TESTING-ISBN-TEST",
+            isBorrowed: false
         });
     }).then(() => {
         return TransactionsTable.create({

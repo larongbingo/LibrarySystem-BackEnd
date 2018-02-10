@@ -1,7 +1,8 @@
 import { 
     GraphQLString, 
     GraphQLInt,
-    GraphQLObjectType
+    GraphQLObjectType,
+    GraphQLBoolean
 } from "graphql";
 
 export default new GraphQLObjectType({
@@ -35,6 +36,20 @@ export default new GraphQLObjectType({
                 type: GraphQLString,
                 resolve(book) {
                     return book.ISBN;
+                }
+            },
+            isBorrowed: {
+                description: "Indicates whether the book has been borrowed by a user",
+                type: GraphQLBoolean,
+                resolve(book) {
+                    return book.isBorrowed;
+                }
+            },
+            userId: {
+                description: "The user id that borrowed the book",
+                type: GraphQLInt,
+                resolve(book) {
+                    return book.userId;
                 }
             }
         };
