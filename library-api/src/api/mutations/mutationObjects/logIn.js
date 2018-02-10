@@ -33,8 +33,9 @@ export default {
                     ita: Date.now(),
                     hash: JWT.sign({
                         username: user.username,
-                        id: user.id
-                    }, "This is a test for the super secret key")
+                        id: user.id,
+                        position: user.userType
+                    }, process.env.SECRET_KEY)
                 }
                 //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},ita:${Date.now()}}`);
             }
