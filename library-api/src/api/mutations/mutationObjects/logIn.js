@@ -15,7 +15,7 @@ export default {
             type: new GraphQLNonNull(GraphQLString),
             description: "The username of the account"
         },
-        password: {
+        password: { // TODO: Hash the password
             type: new GraphQLNonNull(GraphQLString),
             description: "The password of the account"
         }
