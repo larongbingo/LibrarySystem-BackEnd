@@ -42,7 +42,8 @@ export default {
             else {
                 return {
                     success: false,
-                    iat: Date.now()
+                    iat: Date.now(),
+                    reason: "Incorrect credentials"
                 }
                 //return(`{loggedIn:false,iat:${Date.now()}}`);
             }
