@@ -42,8 +42,14 @@ export default {
                         iat: Date.now(),
                         reason: "Invalid Token"
                     }
-                    // TODO: Check if the userType is not "user"
                     // TODO: Refactor everything
+                }
+                else if(decoded.userType === 'ADMIN' || decoded.userType === "STAFF") {
+                    return {
+                        success: false,
+                        iat: Date.now(),
+                        reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"
+                    }
                 }
                 else {
                     if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
