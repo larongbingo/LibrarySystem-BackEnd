@@ -33,7 +33,7 @@ export default {
                     ita: Date.now(),
                     hash: JWT.sign({
                         username: user.username,
-                        id: user.id,
+                        userId: user.id,
                         position: user.userType
                     }, process.env.SECRET_KEY)
                 }
