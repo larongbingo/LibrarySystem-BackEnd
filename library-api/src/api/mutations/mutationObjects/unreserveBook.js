@@ -72,6 +72,13 @@ export default {
                         })
                     }
                 })
+                .catch(err => {
+                    return {
+                        success: false,
+                        iat: Date.now(),
+                        reason: "Error occurred"
+                    }
+                })
             }
         });
     }
