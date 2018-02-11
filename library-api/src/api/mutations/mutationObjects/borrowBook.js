@@ -39,7 +39,7 @@ export default {
                 if(err || !decoded) {
                     return {
                         success: false,
-                        ita: Date.now(),
+                        iat: Date.now(),
                         reason: "Invalid Token"
                     }
                     // TODO: Check if the userType is not "user"
@@ -66,14 +66,14 @@ export default {
                                 transactionID: transaction.id,
                                 transactionType: transaction.transactionType,
                                 transactionRemark: transaction.transactionRemark,
-                                ita: Date.now()
+                                iat: Date.now()
                             }
                         });
                     }
                     else {
                         return {
                             success: false,
-                            ita: Date.now(),
+                            iat: Date.now(),
                             reason: "Book is currently lended to someone"
                         }
                     }

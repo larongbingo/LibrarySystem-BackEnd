@@ -30,21 +30,21 @@ export default {
             if(typeof user !== 'undefined' && user !== null && compareSync(args.password, user.password)) {
                 return {
                     success: true,
-                    ita: Date.now(),
+                    iat: Date.now(),
                     hash: JWT.sign({
                         username: user.username,
                         userId: user.id,
                         position: user.userType
                     }, process.env.SECRET_KEY)
                 }
-                //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},ita:${Date.now()}}`);
+                //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},iat:${Date.now()}}`);
             }
             else {
                 return {
                     success: false,
-                    ita: Date.now()
+                    iat: Date.now()
                 }
-                //return(`{loggedIn:false,ita:${Date.now()}}`);
+                //return(`{loggedIn:false,iat:${Date.now()}}`);
             }
         })
     }

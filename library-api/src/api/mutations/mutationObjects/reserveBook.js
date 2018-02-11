@@ -28,7 +28,7 @@ export default {
             if(err || !decoded) {
                 return {
                     success: false,
-                    ita: Date.now(),
+                    iat: Date.now(),
                     reason: "Invalid Token"
                 }
             }
@@ -54,7 +54,7 @@ export default {
                         .then((transaction) => {
                             return {
                                 success: true,
-                                ita: Date.now(),
+                                iat: Date.now(),
                                 transactionId: transaction.id
                             }
                         })
@@ -62,7 +62,7 @@ export default {
                     else {
                         return {
                             success: false,
-                            ita: Date.now(),
+                            iat: Date.now(),
                             reason: "Book is borrowed or reserved by somebody"
                         }
                     }
@@ -70,7 +70,7 @@ export default {
                 .catch(err => {
                     return {
                         success: false,
-                        ita: Date.now(),
+                        iat: Date.now(),
                         reason: "Error Occurred"
                     }
                 })
