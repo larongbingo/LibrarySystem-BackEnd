@@ -47,7 +47,7 @@ export default {
 
                         return DB.models.transactions.create({
                             transactionType: "RESERVING BOOK",
-                            transactionRemark: `userId ${decoded.userId} reserves bookId ${args.bookId}`,
+                            transactionRemarks: `userId ${decoded.userId} reserves bookId ${args.bookId}`,
                             bookId: args.bookId,
                             userId: decoded.userId
                         })
@@ -65,6 +65,13 @@ export default {
                             ita: Date.now(),
                             reason: "Book is borrowed or reserved by somebody"
                         }
+                    }
+                })
+                .catch(err => {
+                    return {
+                        success: false,
+                        ita: Date.now(),
+                        reason: "Error Occurred"
                     }
                 })
             }
