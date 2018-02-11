@@ -2,6 +2,7 @@ import {
     GraphQLString,
     GraphQLNonNull
 } from "graphql";
+import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 
 export default {
@@ -54,11 +55,21 @@ export default {
                     password: args.password
                 })
                 .then((user) => {
-                    return `{addUserStatus:true,ita:${Date.now()},id:${user.id}}`;
+                    return {
+                        success: true,
+                        iat: Date.now(),
+                        userId: user.id           
+                    }
+                    //return `{addUserStatus:true,iat:${Date.now()},id:${user.id}}`;
                 })
             }
             else {
-                return `{addUserStatus:false,ita:${Date.now()},reason:'username already taken'}`
+                return {
+                    success: false,
+                    iat: Date.now(),
+                    reason: "Username already taken"
+                }
+                //return `{addUserStatus:false,iat:${Date.now()},reason:'username already taken'}`
             }
         })
     }
