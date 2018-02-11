@@ -47,7 +47,7 @@ export default {
 
                         return DB.models.transactions.create({
                             transactionType: "RESERVING BOOK",
-                            transactionRemarks: `userId ${decoded.userId} reserves bookId ${args.bookId}`,
+                            transactionRemarks: `user#${decoded.userId} reserves book#${args.bookId}`,
                             bookId: args.bookId,
                             userId: decoded.userId
                         })
