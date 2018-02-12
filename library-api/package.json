@@ -7,7 +7,8 @@
     "build": "rimraf build/ && babel ./src --out-dir build/",
     "start": "npm run build && node build/index.js",
     "db-cli": "mysql -u root -proot librarySystems",
-    "db-sync": "node build/lib/syncDB.js"
+    "db-sync": "node build/lib/syncDB.js",
+    "db-rand": "node build/lib/genRandData.js"
   },
   "author": "DCIT101",
   "license": "MIT",
