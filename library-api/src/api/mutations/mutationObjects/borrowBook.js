@@ -44,7 +44,7 @@ export default {
                     }
                     // TODO: Refactor everything
                 }
-                else if(decoded.userType === 'ADMIN' || decoded.userType === "STAFF") {
+                else if(decoded.userType !== 'ADMIN' || decoded.userType !== "STAFF") {
                     return {
                         success: false,
                         iat: Date.now(),
