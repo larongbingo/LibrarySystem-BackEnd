@@ -44,14 +44,7 @@ export default {
                     }
                     // TODO: Refactor everything
                 }
-                else if(decoded.userType !== 'ADMIN' || decoded.userType !== "STAFF") {
-                    return {
-                        success: false,
-                        iat: Date.now(),
-                        reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"
-                    }
-                }
-                else {
+                else if(decoded.position === 'ADMINISTRATOR' || decoded.position === "STAFF") {
                     if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
                         // Update the book
                         book.update({
@@ -62,7 +55,7 @@ export default {
                         // Create a transaction object to transactions table
                         return DB.models.transactions.create({
                             transactionType: "BORROWING BOOK",
-                            transactionRemark: args.transactionRemark,
+                            transactionRemarks: args.transactionRemark,
                             userId: args.userId,
                             bookId: args.bookId
                         })
@@ -71,7 +64,7 @@ export default {
                                 success: true,
                                 transactionID: transaction.id,
                                 transactionType: transaction.transactionType,
-                                transactionRemark: transaction.transactionRemark,
+                                transactionRemarks: transaction.transactionRemarks,
                                 iat: Date.now()
                             }
                         });
@@ -82,6 +75,13 @@ export default {
                             iat: Date.now(),
                             reason: "Book is currently lended to someone"
                         }
+                    }
+                }
+                else {
+                    return {
+                        success: false,
+                        iat: Date.now(),
+                        reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"
                     }
                 }
             })
