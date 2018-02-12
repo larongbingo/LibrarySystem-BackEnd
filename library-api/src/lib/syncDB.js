@@ -1,5 +1,3 @@
-import Faker from "faker";
-import _ from "lodash";
 import DB from "../db/dbMap";
 import UsersTable from "../db/tables/users";
 import BooksTable from "../db/tables/books";
