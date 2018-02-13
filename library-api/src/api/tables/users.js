@@ -1,3 +1,8 @@
+/**
+ * users.js
+ * Holds all of the data that represents a user
+ */
+
 import { 
     GraphQLString, 
     GraphQLInt,

@@ -1,3 +1,8 @@
+/**
+ * logIn.js
+ * Handles all of the requests for authenticating users and sending JWTs
+ */
+
 import {
     GraphQLString,
     GraphQLNonNull

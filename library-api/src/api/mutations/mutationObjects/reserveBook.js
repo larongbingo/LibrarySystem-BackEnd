@@ -1,3 +1,8 @@
+/**
+ * reserveBook.js
+ * Handles all of the requests for marking books 'reserved'
+ */
+
 import {
     GraphQLString,
     GraphQLInt,

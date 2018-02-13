@@ -1,3 +1,8 @@
+/**
+ * transactions.js
+ * Represents information and data of a transaction
+ */
+
 import { 
     GraphQLString, 
     GraphQLInt,

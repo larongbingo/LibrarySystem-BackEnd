@@ -1,3 +1,8 @@
+/**
+ * books.js
+ * Represents the information of a book
+ */
+
 import { 
     GraphQLString, 
     GraphQLInt,

@@ -1,3 +1,8 @@
+/**
+ * transactions.js
+ * Handles all of the queries about the transaction
+ */
+
 import { 
     GraphQLString, 
     GraphQLInt,

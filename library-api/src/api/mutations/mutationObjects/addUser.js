@@ -1,3 +1,8 @@
+/**
+ * addUser.js
+ * Handles all of the process in creating a new account
+ */
+
 import {
     GraphQLString,
     GraphQLNonNull

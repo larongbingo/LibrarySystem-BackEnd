@@ -1,3 +1,8 @@
+/**
+ * query.js
+ * Holds all of the GET Request APIs
+ */
+
 import { GraphQLObjectType } from "graphql";
 import UsersQueryObject from "./queryObjects/users";
 import BooksQueryObject from "./queryObjects/books";

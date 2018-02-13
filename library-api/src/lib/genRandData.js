@@ -1,3 +1,9 @@
+/**
+ * genRandData.js
+ * Adds random testing data to the Database.
+ * Also adds the admin account.
+ */
+
 import Faker from "faker";
 import _ from "lodash";
 import DB from "../db/dbMap";

@@ -1,3 +1,9 @@
+/**
+ * syncDB.js
+ * Syncs the changes from the ORM to the Database.
+ * It only adds the admin account.
+ */
+
 import DB from "../db/dbMap";
 import UsersTable from "../db/tables/users";
 import BooksTable from "../db/tables/books";

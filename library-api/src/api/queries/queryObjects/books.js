@@ -1,3 +1,8 @@
+/**
+ * books.js
+ * Handles all the request for data about books
+ */
+
 import { 
     GraphQLList,
     GraphQLInt,

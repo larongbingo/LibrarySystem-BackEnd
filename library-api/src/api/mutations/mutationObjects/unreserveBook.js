@@ -1,3 +1,8 @@
+/**
+ * unreserveBook.js
+ * Handles all requests that cancels a reservation of a book
+ */
+
 import {
     GraphQLString,
     GraphQLInt,

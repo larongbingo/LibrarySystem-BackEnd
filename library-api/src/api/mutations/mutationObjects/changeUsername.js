@@ -1,3 +1,8 @@
+/**
+ * changeUsername.js
+ * Handles all processes for changing the username in an account
+ */
+
 import {
     GraphQLString,
     GraphQLNonNull

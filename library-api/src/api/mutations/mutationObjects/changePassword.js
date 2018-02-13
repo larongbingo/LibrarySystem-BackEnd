@@ -1,3 +1,8 @@
+/**
+ * changePassword.js
+ * Handles all of the process in changing password
+ */
+
 import {
     GraphQLString,
     GraphQLNonNull

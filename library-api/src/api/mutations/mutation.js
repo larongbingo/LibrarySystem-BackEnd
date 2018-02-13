@@ -1,3 +1,8 @@
+/**
+ * mutation.js
+ * Holds all of the POST Request APIs
+ */
+
 import { GraphQLObjectType } from "graphql";
 import LogInObject from "./mutationObjects/logIn";
 import AddUserObject from "./mutationObjects/addUser";

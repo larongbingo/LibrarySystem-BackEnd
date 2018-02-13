@@ -1,3 +1,8 @@
+/**
+ * users.js
+ * Handles all of the requests for user infos
+ */
+
 import { 
     GraphQLList,
     GraphQLInt,

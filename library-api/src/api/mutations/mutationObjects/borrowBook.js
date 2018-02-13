@@ -1,3 +1,8 @@
+/**
+ * borrowBook.js
+ * Handles all of the process in marking a book 'borrowed'
+ */
+
 import {
     GraphQLString,
     GraphQLInt,

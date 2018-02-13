@@ -1,3 +1,8 @@
+/**
+ * returnBook.js
+ * Handles all of the requests that marks a book 'returned'
+ */
+
 import {
     GraphQLString,
     GraphQLInt,
