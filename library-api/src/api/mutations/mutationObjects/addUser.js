@@ -11,7 +11,7 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 
 export default {
-    type: GraphQLString,
+    type: GraphQLJSON,
     description: "Registers a new account to the user using the given info and credentials",
     args: {
         firstName: {
