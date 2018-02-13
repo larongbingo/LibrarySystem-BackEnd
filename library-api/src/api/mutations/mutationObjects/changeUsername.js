@@ -50,7 +50,7 @@ export default {
                     else {
                         return DB.models.transactions.create({
                             transactionType: "CHANGE USERNAME",
-                            transactionRemarks: `user${user.id} changes username from ${user.username} to ${args.username}`,
+                            transactionRemarks: `user${user.id} changes username from ${user.username} to ${args.newUsername}`,
                             userId: user.id,
                             bookId: null
                         })
