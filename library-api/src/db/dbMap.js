@@ -8,6 +8,7 @@ import DB from "./dbConn";
 import UsersTable from "./tables/users";
 import BooksTable from "./tables/books";
 import TransactionsTable from "./tables/transactions";
+import SessionsTable from "./tables/sessions";
 
 // Many Books to One User
 UsersTable.hasMany(BooksTable);
