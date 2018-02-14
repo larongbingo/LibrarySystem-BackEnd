@@ -78,7 +78,7 @@ export default {
                         return {
                             success: false,
                             iat: Date.now(),
-                            reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, its currently reserved") 
+                            reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, or its currently reserved") 
                         }
                     }
                 })
