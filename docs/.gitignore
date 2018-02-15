@@ -1,0 +1,6 @@
+.idea
+_site
+node_modules
+
+# Only on dev
+_dist

@@ -15,3 +15,9 @@
 # Library API
 /library-api/node_modules
 /library-api/build
+
+# Docs
+/docs/_site
+/docs/node_modules
+# on dev
+/docs/_dist
