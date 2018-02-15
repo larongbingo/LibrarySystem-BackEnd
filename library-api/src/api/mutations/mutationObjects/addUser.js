@@ -9,6 +9,7 @@ import {
 } from "graphql";
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
+import JWT from "jsonwebtoken";
 
 export default {
     type: GraphQLJSON,
@@ -28,7 +29,8 @@ export default {
         },
         userType: {
             type: new GraphQLNonNull(GraphQLString),
-            description: "The account type or class"
+            description: "The account type or class",
+            depracationReason: "Instead of marking each user a userType, the API will simply check if the token is an ADMIN or a STAFF"
         },
         username: {
             type: new GraphQLNonNull(GraphQLString),
@@ -51,21 +53,68 @@ export default {
         })
         .then(user => {
             if(user === null || typeof user === 'undefined') {
-                return DB.models.users.create({
-                    firstName: args.firstName,
-                    lastName: args.lastName,
-                    userID: args.userID,
-                    userType: args.userType,
-                    username: args.username,
-                    password: args.password
-                })
-                .then((user) => {
-                    return {
-                        success: true,
-                        iat: Date.now(),
-                        userId: user.id           
+                return DB.models.sessions.findOne({
+                    where: {
+                        token: args.token
                     }
-                    //return `{addUserStatus:true,iat:${Date.now()},id:${user.id}}`;
+                })
+                .then(session => {
+                    if(!session) {
+                        return DB.models.users.create({
+                            firstName: args.firstName,
+                            lastName: args.lastName,
+                            userID: args.userID,
+                            userType: "USER",
+                            username: args.username,
+                            password: args.password
+                        })
+                        .then((user) => {
+                            return {
+                                success: true,
+                                iat: Date.now(),
+                                userId: user.id           
+                            }
+                        })
+                    }
+                    else {
+                        return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
+                            if(err || !decoded) {
+                                return DB.models.users.create({
+                                    firstName: args.firstName,
+                                    lastName: args.lastName,
+                                    userID: args.userID,
+                                    userType: "USER",
+                                    username: args.username,
+                                    password: args.password
+                                })
+                                .then((user) => {
+                                    return {
+                                        success: true,
+                                        iat: Date.now(),
+                                        userId: user.id           
+                                    }
+                                })
+                            }
+                            
+                            return DB.models.users.create({
+                                firstName: args.firstName,
+                                lastName: args.lastName,
+                                userID: args.userID,
+                                userType: "STAFF",
+                                username: args.username,
+                                password: args.password
+                            })
+                            .then((user) => {
+                                return {
+                                    success: true,
+                                    iat: Date.now(),
+                                    userId: user.id           
+                                }
+                                //return `{addUserStatus:true,iat:${Date.now()},id:${user.id}}`;
+                            })
+                        })
+                    }
+
                 })
             }
             else {

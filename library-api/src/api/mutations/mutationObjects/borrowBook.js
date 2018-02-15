@@ -50,37 +50,52 @@ export default {
                     // TODO: Refactor everything
                 }
                 else if(decoded.position === 'ADMINISTRATOR' || decoded.position === "STAFF") {
-                    if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
-                        // Update the book
-                        book.update({
-                            isBorrowed: true,
-                            userId: args.userId
-                        });
-        
-                        // Create a transaction object to transactions table
-                        return DB.models.transactions.create({
-                            transactionType: "BORROWING BOOK",
-                            transactionRemarks: args.transactionRemark,
-                            userId: args.userId,
-                            bookId: args.bookId
-                        })
-                        .then(transaction => {
+                    return DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
+                        }
+                    })
+                    .then(session => {
+                        if(!session) {
                             return {
                                 success: true,
-                                transactionID: transaction.id,
-                                transactionType: transaction.transactionType,
-                                transactionRemarks: transaction.transactionRemarks,
-                                iat: Date.now()
+                                iat: Date.now(),
+                                reason: "Token is expired"
                             }
-                        });
-                    }
-                    else {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Book is currently lended to someone"
                         }
-                    }
+
+                        if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
+                            // Update the book
+                            book.update({
+                                isBorrowed: true,
+                                userId: args.userId
+                            });
+            
+                            // Create a transaction object to transactions table
+                            return DB.models.transactions.create({
+                                transactionType: "BORROWING BOOK",
+                                transactionRemarks: args.transactionRemark,
+                                userId: args.userId,
+                                bookId: args.bookId
+                            })
+                            .then(transaction => {
+                                return {
+                                    success: true,
+                                    transactionID: transaction.id,
+                                    transactionType: transaction.transactionType,
+                                    transactionRemarks: transaction.transactionRemarks,
+                                    iat: Date.now()
+                                }
+                            });
+                        }
+                        else {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "Book is currently lended to someone"
+                            }
+                        }
+                    })
                 }
                 else {
                     return {

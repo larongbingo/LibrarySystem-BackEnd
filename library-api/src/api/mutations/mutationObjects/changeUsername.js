@@ -40,33 +40,48 @@ export default {
                     }
                 })
                 .then(user => {
-                    if(!user) {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "User does not exist"
+                    return DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
                         }
-                    }
-                    else {
-                        return DB.models.transactions.create({
-                            transactionType: "CHANGE USERNAME",
-                            transactionRemarks: `user${user.id} changes username from ${user.username} to ${args.newUsername}`,
-                            userId: user.id,
-                            bookId: null
-                        })
-                        .then(transaction => {
-                            user.update({
-                                username: args.newUsername
-                            });
-
+                    })
+                    .then(session => {
+                        if(!session) {
                             return {
-                                success: true,
+                                success: false,
                                 iat: Date.now(),
-                                transactionType: transaction.transactionType,
-                                transactionRemarks: transaction.transactionRemarks
+                                reason: "Token is expired"
                             }
-                        })
-                    }
+                        }
+
+                        if(!user) {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "User does not exist"
+                            }
+                        }
+                        else {
+                            return DB.models.transactions.create({
+                                transactionType: "CHANGE USERNAME",
+                                transactionRemarks: `user${user.id} changes username from ${user.username} to ${args.newUsername}`,
+                                userId: user.id,
+                                bookId: null
+                            })
+                            .then(transaction => {
+                                user.update({
+                                    username: args.newUsername
+                                });
+    
+                                return {
+                                    success: true,
+                                    iat: Date.now(),
+                                    transactionType: transaction.transactionType,
+                                    transactionRemarks: transaction.transactionRemarks
+                                }
+                            })
+                        }
+                    })
                 });
             }
         });

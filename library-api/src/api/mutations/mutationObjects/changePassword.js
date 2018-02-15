@@ -40,41 +40,56 @@ export default {
                     }
                 })
                 .then(user => {
-                    if(!user) {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "User does not exist"
+                    return DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
                         }
-                    }
-
-                    if(user.id === decoded.userId) {
-                        user.update({
-                            password: args.newPassword
-                        });
-    
-                        return DB.models.transactions.create({
-                            transactionType: "CHANGE PASSWORD",
-                            transactionRemarks: `user#${user.id} changed password`,
-                            userId: user.id,
-                            bookId: null
-                        })
-                        .then(transaction => {
+                    })
+                    .then(session => {
+                        if(!session) {
                             return {
-                                success: true,
+                                success: false,
                                 iat: Date.now(),
-                                transactionType: transaction.transactionType,
-                                transactionRemarks: transaction.transactionRemarks
+                                reason: "Token is expired"
                             }
-                        });
-                    }
-                    else {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Error Occurred" // user and requesting user ids is not the same
                         }
-                    }
+
+                        if(!user) {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "User does not exist"
+                            }
+                        }
+    
+                        if(user.id === decoded.userId) {
+                            user.update({
+                                password: args.newPassword
+                            });
+        
+                            return DB.models.transactions.create({
+                                transactionType: "CHANGE PASSWORD",
+                                transactionRemarks: `user#${user.id} changed password`,
+                                userId: user.id,
+                                bookId: null
+                            })
+                            .then(transaction => {
+                                return {
+                                    success: true,
+                                    iat: Date.now(),
+                                    transactionType: transaction.transactionType,
+                                    transactionRemarks: transaction.transactionRemarks
+                                }
+                            });
+                        }
+                        else {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "Error Occurred" // user and requesting user ids is not the same
+                            }
+                        }
+                    })
                 })
             }
         });

@@ -50,37 +50,52 @@ export default {
                     }
                 })
                 .then(book => {
-                    let sameUserID = book.userId === args.userId;
-                    
-                    if(sameUserID && book.isBorrowed) {
-                        book.update({
-                            isBorrowed: false,
-                            userId: null
-                        });
-
-                        return DB.models.transactions.create({
-                            transactionType: "RETURNING BOOK",
-                            transactionRemarks: args.transactionRemark,
-                            userId: args.userId,
-                            bookId: args.bookId
-                        })
-                        .then((transaction) => {
-                            return {
-                                success: true,
-                                transactionID: transaction.id,
-                                transactionType: transaction.transactionType,
-                                transactionRemarks: transaction.transactionRemarks,
-                                iat: Date.now()
-                            }
-                        })
-                    }
-                    else {                   
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, or its currently reserved") 
+                    DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
                         }
-                    }
+                    })
+                    .then(session => {
+                        if(!session) {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "Token is expired"
+                            }
+                        }
+
+                        let sameUserID = book.userId === args.userId;
+                    
+                        if(sameUserID && book.isBorrowed) {
+                            book.update({
+                                isBorrowed: false,
+                                userId: null
+                            });
+    
+                            return DB.models.transactions.create({
+                                transactionType: "RETURNING BOOK",
+                                transactionRemarks: args.transactionRemark,
+                                userId: args.userId,
+                                bookId: args.bookId
+                            })
+                            .then((transaction) => {
+                                return {
+                                    success: true,
+                                    transactionID: transaction.id,
+                                    transactionType: transaction.transactionType,
+                                    transactionRemarks: transaction.transactionRemarks,
+                                    iat: Date.now()
+                                }
+                            })
+                        }
+                        else {                   
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, or its currently reserved") 
+                            }
+                        }
+                    })
                 })
             }
             else {
