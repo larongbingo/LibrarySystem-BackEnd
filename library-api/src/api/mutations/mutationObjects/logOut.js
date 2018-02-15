@@ -35,7 +35,7 @@ export default {
                         return {
                             success: false,
                             iat: Date.now(),
-                            reason: "No such user exists"
+                            reason: "No such user exists or logged in"
                         }
                     }
 
