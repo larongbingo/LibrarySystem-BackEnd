@@ -9,6 +9,8 @@ import CORS from "cors";
 import API_Schema from "./api/graphql";
 import GraphqlHTTP from "express-graphql";
 import Morgan from "morgan";
+import NodeCleanup from "node-cleanup";
+import DB from "./db/dbMap";
 
 const App = Express();
 
@@ -36,4 +38,8 @@ App.listen(
     () => {
         console.log("Server is running");
     } 
-)
+);
+
+NodeCleanup(function(exitCode, cleanup) {
+    DB.close();
+})
