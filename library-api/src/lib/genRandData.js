@@ -10,6 +10,7 @@ import DB from "../db/dbMap";
 import UsersTable from "../db/tables/users";
 import BooksTable from "../db/tables/books";
 import TransactionsTable from "../db/tables/transactions";
+import SessionsTable from "../db/tables/sessions";
 
 DB.sync({force: true})
 .then(() => {
@@ -67,6 +68,14 @@ DB.sync({force: true})
             transactionRemarks: "This is a test"
         })
     })
+    .then(() => {
+        return SessionsTable.create({
+            token: "THIS IS A TESTING TOKEN"
+        })
+        .then((session) => {
+            return session.destroy();
+        })
+    }) 
     .then(() => {
         process.exit(0);
     })
