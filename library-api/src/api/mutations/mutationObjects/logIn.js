@@ -32,13 +32,21 @@ export default {
             }
         })
         .then(user => {
+            if(!user) {
+                return {
+                    success: false,
+                    iat: Date.now(),
+                    reason: "User does not exist"
+                }
+            }
+
             let hash = JWT.sign({
                 username: user.username,
                 userId: user.id,
                 position: user.userType
             }, process.env.SECRET_KEY);
 
-            if(typeof user !== 'undefined' && user !== null && compareSync(args.password, user.password)) {
+            if(compareSync(args.password, user.password)) {
                 DB.models.sessions.create({
                     token: hash
                 });
