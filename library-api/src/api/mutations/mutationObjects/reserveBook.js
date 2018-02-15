@@ -44,33 +44,49 @@ export default {
                     }
                 })
                 .then(book => {
-                    // Check if the book isn't reserved or borrowed by anyone
-                    if(book.userId === null) {
-                        book.update({
-                            userId: decoded.userId
-                        });
-
-                        return DB.models.transactions.create({
-                            transactionType: "RESERVING BOOK",
-                            transactionRemarks: `user#${decoded.userId} reserves book#${args.bookId}`,
-                            bookId: args.bookId,
-                            userId: decoded.userId
-                        })
-                        .then((transaction) => {
-                            return {
-                                success: true,
-                                iat: Date.now(),
-                                transactionId: transaction.id
-                            }
-                        })
-                    } 
-                    else {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Book is borrowed or reserved by somebody"
+                    return DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
                         }
-                    }
+                    })
+                    .then(session => {
+                        if(!session) {
+                            return {
+                                success: false,
+                                iat: Date.now(),
+                                reason: "Token is expired"
+                            }
+                        }
+                        else {
+                            // Check if the book isn't reserved or borrowed by anyone
+                            if(book.userId === null) {
+                                book.update({
+                                    userId: decoded.userId
+                                });
+
+                                return DB.models.transactions.create({
+                                    transactionType: "RESERVING BOOK",
+                                    transactionRemarks: `user#${decoded.userId} reserves book#${args.bookId}`,
+                                    bookId: args.bookId,
+                                    userId: decoded.userId
+                                })
+                                .then((transaction) => {
+                                    return {
+                                        success: true,
+                                        iat: Date.now(),
+                                        transactionId: transaction.id
+                                    }
+                                })
+                            } 
+                            else {
+                                return {
+                                    success: false,
+                                    iat: Date.now(),
+                                    reason: "Book is borrowed or reserved by somebody"
+                                }
+                            }
+                        }
+                    })
                 })
                 .catch(err => {
                     return {
