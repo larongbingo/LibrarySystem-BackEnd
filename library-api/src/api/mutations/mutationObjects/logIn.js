@@ -32,15 +32,21 @@ export default {
             }
         })
         .then(user => {
+            let hash = JWT.sign({
+                username: user.username,
+                userId: user.id,
+                position: user.userType
+            }, process.env.SECRET_KEY);
+
             if(typeof user !== 'undefined' && user !== null && compareSync(args.password, user.password)) {
+                DB.models.sessions.create({
+                    token: hash
+                });
+                
                 return {
                     success: true,
                     iat: Date.now(),
-                    hash: JWT.sign({
-                        username: user.username,
-                        userId: user.id,
-                        position: user.userType
-                    }, process.env.SECRET_KEY)
+                    hash: hash
                 }
                 //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},iat:${Date.now()}}`);
             }
