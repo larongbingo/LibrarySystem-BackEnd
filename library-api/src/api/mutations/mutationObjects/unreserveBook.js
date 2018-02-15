@@ -43,39 +43,55 @@ export default {
                     }
                 })
                 .then(book => {
-                    if(typeof book === 'undefined' || book === null) {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Book does not exist"
+                    return DB.models.sessions.findOne({
+                        where: {
+                            token: args.token
                         }
-                    }
-                    else if(book.userId === null && book.userId !== decoded.userId) {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Book is not reserved to the user"
-                        }
-                    }
-                    else {
-                        book.update({
-                            userId: null
-                        });
-
-                        return DB.models.transactions.create({
-                            transactionType: "UNRESERVE BOOK",
-                            transactionRemarks: `user#${decoded.userId} cancels reservation to book#${args.bookId}`,
-                            userId: decoded.userId,
-                            bookId: args.bookId
-                        })
-                        .then(transaction => {
+                    })
+                    .then(session => {
+                        if(!session) {
                             return {
-                                success: true,
+                                success: false,
                                 iat: Date.now(),
-                                transactionID: transaction.id 
+                                reason: "Token is expired"
                             }
-                        })
-                    }
+                        }
+                        else {
+                            if(typeof book === 'undefined' || book === null) {
+                                return {
+                                    success: false,
+                                    iat: Date.now(),
+                                    reason: "Book does not exist"
+                                }
+                            }
+                            else if(book.userId === null && book.userId !== decoded.userId) {
+                                return {
+                                    success: false,
+                                    iat: Date.now(),
+                                    reason: "Book is not reserved to the user"
+                                }
+                            }
+                            else {
+                                book.update({
+                                    userId: null
+                                });
+        
+                                return DB.models.transactions.create({
+                                    transactionType: "UNRESERVE BOOK",
+                                    transactionRemarks: `user#${decoded.userId} cancels reservation to book#${args.bookId}`,
+                                    userId: decoded.userId,
+                                    bookId: args.bookId
+                                })
+                                .then(transaction => {
+                                    return {
+                                        success: true,
+                                        iat: Date.now(),
+                                        transactionID: transaction.id 
+                                    }
+                                })
+                            }
+                        }
+                    })
                 })
                 .catch(err => {
                     return {
