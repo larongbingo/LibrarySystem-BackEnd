@@ -41,5 +41,6 @@ App.listen(
 );
 
 NodeCleanup(function(exitCode, cleanup) {
+    console.log("Exiting!");
     DB.close();
 })
