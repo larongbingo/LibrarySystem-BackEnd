@@ -73,12 +73,21 @@ export default {
                                     username: args.newUsername
                                 });
     
-                                return {
-                                    success: true,
-                                    iat: Date.now(),
-                                    transactionType: transaction.transactionType,
-                                    transactionRemarks: transaction.transactionRemarks
-                                }
+                                return DB.models.sessions.findOne({
+                                    where: {
+                                        token: args.token
+                                    }
+                                })
+                                .then(session => {
+                                    session.destroy();
+
+                                    return {
+                                        success: true,
+                                        iat: Date.now(),
+                                        transactionType: transaction.transactionType,
+                                        transactionRemarks: transaction.transactionRemarks
+                                    }
+                                })
                             })
                         }
                     })

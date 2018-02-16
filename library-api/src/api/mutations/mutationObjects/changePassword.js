@@ -74,12 +74,21 @@ export default {
                                 bookId: null
                             })
                             .then(transaction => {
-                                return {
-                                    success: true,
-                                    iat: Date.now(),
-                                    transactionType: transaction.transactionType,
-                                    transactionRemarks: transaction.transactionRemarks
-                                }
+                                return DB.models.session.findOne({
+                                    where: {
+                                        token: args.token
+                                    }
+                                })
+                                .then(session => {
+                                    session.destroy();
+
+                                    return {
+                                        success: true,
+                                        iat: Date.now(),
+                                        transactionType: transaction.transactionType,
+                                        transactionRemarks: transaction.transactionRemarks
+                                    }
+                                })
                             });
                         }
                         else {
