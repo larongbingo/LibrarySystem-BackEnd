@@ -35,6 +35,10 @@ export default {
         isBorrowed: {
             description: "Indicates if the book has been borrowed by a user",
             type: GraphQLBoolean
+        },
+        userId: {
+            description: "The id of the user that is currently borrowing/holds the book",
+            type: GraphQLInt
         }
     },
     resolve(root, args) {
