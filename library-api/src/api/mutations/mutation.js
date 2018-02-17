@@ -7,6 +7,7 @@ import { GraphQLObjectType } from "graphql";
 import LogInObject from "./mutationObjects/logIn";
 import LogOutObject from "./mutationObjects/logOut";
 import AddUserObject from "./mutationObjects/addUser";
+import AddBookObject from "./mutationObjects/addBook";
 import BorrowBookObject from "./mutationObjects/borrowBook";
 import ReturnBookObject from "./mutationObjects/returnBook";
 import ReserveBookObject from "./mutationObjects/reserveBook";
@@ -24,6 +25,7 @@ export default new GraphQLObjectType({
             logIn: LogInObject,
             logOut: LogOutObject,
             addUser: AddUserObject,
+            addBook: AddBookObject,
             borrowBook: BorrowBookObject,
             returnBook: ReturnBookObject,
             reserveBook: ReserveBookObject,
