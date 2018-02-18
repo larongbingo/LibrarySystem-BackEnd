@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "The API for the Library System",
   "main": "build/index.js",
+  "private": true,
   "scripts": {
     "build": "rimraf ./build/ && babel ./src --out-dir build/",
     "start": "node ./build/index.js",
