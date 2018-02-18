@@ -1,22 +1,15 @@
+# Directories
+/node_modules
+/coverage
+/build
 
-# Library Web App
-/library-web-app/node_modules
-/library-web-app/coverage
-/library-web-app/build
-/library-web-app/.DS_Store
-/library-web-app/.env.local
-/library-web-app/.env.development.local
-/library-web-app/.env.test.local
-/library-web-app/.env.production.local
-/library-web-app/npm-debug.log*
-/library-web-app/yarn-debug.log*
-/library-web-app/yarn-error.log*
+# Files
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Library API
-/library-api/node_modules
-/library-api/build
-
-# Docs
-/docs/_site
-/docs/.sass-cache
-/docs/.jekyll-metadata

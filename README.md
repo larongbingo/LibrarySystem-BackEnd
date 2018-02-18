@@ -1,43 +1,25 @@
-# Library-System
-Project in Management Information System (DCIT101)
-
-Its made of 2 servers. Public API and React App.
-
-## Notes
-You must install the following to run the server:
-* NodeJS (includes NPM)
-* MySQL Client (Any SQL Client is ok, as long you change the `dialect` at `./library-api/db/dbConn.js`)
+# Library API
+This is the API Server of the Library System.
 
 ## Stack
-* Front End (library-web-app)
-    * NodeJS(Server Language)
-        * React (Front End Framework)
-            * React Router v4 (Routing)
-            * React Bootstrap (Bootstrap Components)
-        * Axios (Fetching and Sending Data)
-        * Serve (Serving Static Files)
-* Back End (library-api)
-    * NodeJS (Server Language)
-        * Express (Routing)
-        * GraphQL (RESTful API)
-            * Express-Graphql (Middleware for handling queries of GraphQL APIs)
-            * Graphiql (Middleware for testing GraphQL APIs)
-            * GraphQL-Type-JSON (A custom GraphQL Data Type that lets routes send and recieve JSON)
-            * JWT (Tokens for POST Requests)
-        * Sequelize (ORM)
-        * Morgan (Logging HTTP Requests)
-        * CORS (Allowing CORS Requests)
-        * Rimraf (Deleting Build Files)
-        * Faker (Generating Testing Data)
-        * Lodash 
-        * MySQL2 (MySQL Driver)
-    * MySQL
-    
-Both servers use Babel for transpiling.
+* NodeJS (Server Language)
+    * Express (Routing)
+    * GraphQL (RESTful API)
+        * Express-Graphql (Middleware for handling queries of GraphQL APIs)
+        * Graphiql (Middleware for testing GraphQL APIs)
+        * GraphQL-Type-JSON (A custom GraphQL Data Type that lets routes send and recieve JSON)
+        * JWT (Tokens for POST Requests)
+    * Sequelize (ORM)
+    * Morgan (Logging HTTP Requests)
+    * CORS (Allowing CORS Requests)
+    * Rimraf (Deleting Build Files)
+    * Faker (Generating Testing Data)
+    * Lodash 
+    * MySQL2 (MySQL Driver)
+* MySQL (Any SQL Client will do, as long as you change `dialect` at `src/db/dbConn`)
 
-## Contributors
-* Renz Christen Yeomer A. Pagulayan
-* Michael Casals
-* Joshua Albert Vilanueva
-* Sache Aclan
-* Mark Louie Cipriano
+## Set Up
+1. Create the MySQL Database and name it `LibrarySystems`
+2. Run `npm install` to install app dependencies
+3. Run `npm run db-sync` to add test data and create the tables to the database.
+4. Run `npm run start` to build and start the API Server.
