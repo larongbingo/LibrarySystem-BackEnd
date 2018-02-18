@@ -11,6 +11,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -31,11 +32,7 @@ export default {
             
             // Check if theres no error during decryption
             if(err || !decoded) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Invalid Token"
-                }
+                return createResponse(false, 3, {reason: "Invalid Token"}); 
             }
             else {
                 return DB.models.books.findOne({
@@ -51,11 +48,7 @@ export default {
                     })
                     .then(session => {
                         if(!session) {
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: "Token is expired"
-                            }
+                            return createResponse(false, 4, {reason: "Token is expired"}); 
                         }
                         else {
                             // Check if the book isn't reserved or borrowed by anyone
@@ -71,29 +64,17 @@ export default {
                                     userId: decoded.userId
                                 })
                                 .then((transaction) => {
-                                    return {
-                                        success: true,
-                                        iat: Date.now(),
-                                        transactionId: transaction.id
-                                    }
+                                    return createResponse(true, 0, {transactionId: transaction.id});
                                 })
                             } 
                             else {
-                                return {
-                                    success: false,
-                                    iat: Date.now(),
-                                    reason: "Book is borrowed or reserved by somebody"
-                                }
+                                return createResponse(false, 13, {reason: "Book is borrowed or reserved by somebody"});
                             }
                         }
                     })
                 })
                 .catch(err => {
-                    return {
-                        success: false,
-                        iat: Date.now(),
-                        reason: "Error Occurred"
-                    }
+                    return createResponse(false, 1, {reason: "Error occurred"}); 
                 })
             }
         });

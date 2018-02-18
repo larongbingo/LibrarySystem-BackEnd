@@ -11,6 +11,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -88,22 +89,16 @@ export default {
                                 }
                             })
                         }
-                        else {                   
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, or its currently reserved") 
-                            }
+                        else {
+                            return createResponse(false, 
+                                (!sameUserID) ? 14 : 15, 
+                                {reason: ((!sameUserID) ? "The book is not borrowed by the requesting user. " : "The book is not yet borrowed, or its currently reserved")})
                         }
                     })
                 })
             }
             else {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "The returning of a book needs to be validated by a STAFF or an ADMIN"
-                }
+                return createResponse(false, 16, {reason: "The returning of a book needs to be validated by a STAFF or an ADMIN"}); 
             }
         });
     }

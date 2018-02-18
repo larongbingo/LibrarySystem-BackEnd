@@ -11,6 +11,7 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import { hashSync, compareSync } from "bcrypt-nodejs";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -33,11 +34,7 @@ export default {
         })
         .then(user => {
             if(!user) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "User does not exist"
-                }
+                return createResponse(false, 9, {reason: "User does not exist"}); 
             }
 
             let hash = JWT.sign({
@@ -51,20 +48,10 @@ export default {
                     token: hash
                 });
                 
-                return {
-                    success: true,
-                    iat: Date.now(),
-                    hash: hash
-                }
-                //return(`{loggedIn:true,hash:'${hashSync(user.username)}',id:${user.id},iat:${Date.now()}}`);
+                return createResponse(true, 0, {token: hash});
             }
             else {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Incorrect credentials"
-                }
-                //return(`{loggedIn:false,iat:${Date.now()}}`);
+                return createResponse(false, 11, {reason: "Incorrect credentials"}); 
             }
         })
     }

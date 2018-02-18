@@ -10,6 +10,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -36,11 +37,7 @@ export default {
         // Check if token is valid
         return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {    
             if(err || !decoded) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Invalid Token"
-                }
+                return createResponse(true, 3, {reason: "Invalid Token"});
             }
 
             // Check if the position is 'ADMINISTRATOR' or 'STAFF'
@@ -62,28 +59,16 @@ export default {
                         })
                         .then((book) => {
                             // Return success
-                            return {
-                                success: true,
-                                iat: Date.now(),
-                                bookId: book.id
-                            }
+                            return createResponse(true, 0, {bookId: book.id});
                         });
                     }
                     else {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "Invalid Token"
-                        }
+                        return createResponse(false, 4, {reason: "Token is expired"});
                     }
                 })
             }
             
-            return {
-                success: false,
-                iat: Date.now(),
-                reason: "Invalid Token, only ADMINS or STAFFS can add books"
-            }
+            return createResponse(false, 5, {reason: "Invalid Token, only ADMINS or STAFFS can add books"});
         });
     }
 }
