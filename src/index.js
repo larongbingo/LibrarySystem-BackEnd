@@ -29,6 +29,10 @@ App.use(CORS());
 // Log all HTTP Requests to console
 App.use(Morgan("combined"));
 
+App.use("/", function(req, res, next) {
+    res.send("<h1>This is the API server of the Library System</h1>")
+});
+
 // Route for the GraphQLHTTP middleware
 App.use("/api", GraphqlHTTP({
     schema: API_Schema
