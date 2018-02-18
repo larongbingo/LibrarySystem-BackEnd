@@ -11,6 +11,7 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import Bcrypt from "bcrypt-nodejs";
 
 export default {
     type: GraphQLJSON,
@@ -53,7 +54,7 @@ export default {
     
                         if(user.id === decoded.userId) {
                             user.update({
-                                password: args.newPassword
+                                password: Bcrypt.hashSync(args.newPassword)
                             });
         
                             return DB.models.transactions.create({
@@ -63,7 +64,7 @@ export default {
                                 bookId: null
                             })
                             .then(transaction => {
-                                return DB.models.session.findOne({
+                                return DB.models.sessions.findOne({
                                     where: {
                                         token: args.token
                                     }
