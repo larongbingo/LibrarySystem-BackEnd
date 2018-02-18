@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf build/ && babel ./src --out-dir build/",
     "start": "npm run build && node build/index.js",
-    "db-cli": "mysql -u admin -pb0bski123 --host sl-us-south-1-portal.19.dblayer.com --port 35234 --ssl-mode=REQUIRED",
+    "db-cli": "mysql -u admin -pb0bski123 --host sl-us-south-1-portal.19.dblayer.com --port 35234 --ssl-mode=REQUIRED LibrarySystems",
     "db-sync": "node build/lib/syncDB.js",
     "db-rand": "node build/lib/genRandData.js"
   },
