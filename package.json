@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "cfenv": "^1.0.4",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
@@ -23,9 +24,9 @@
     "jsonwebtoken": "^8.1.1",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.2",
+    "node-cleanup": "^2.1.2",
     "rimraf": "^2.6.2",
-    "sequelize": "^4.33.1",
-    "node-cleanup": "^2.1.2"
+    "sequelize": "^4.33.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
