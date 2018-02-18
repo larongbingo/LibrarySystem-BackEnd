@@ -11,6 +11,7 @@ import GraphqlHTTP from "express-graphql";
 import Morgan from "morgan";
 import NodeCleanup from "node-cleanup";
 import DB from "./db/dbMap";
+import cfEnv from "cfenv";
 
 const App = Express();
 
@@ -40,9 +41,11 @@ App.use("/graphiql", GraphqlHTTP({
 }));
 
 // Make the server run
+const hostEnv = cfEnv.getAppEnv();
+
 App.listen(
-    process.env.PORT || 8080,
-    process.env.HOST || "127.0.0.1",
+    hostEnv.port || process.env.PORT || 8080,
+    hostEnv.host || process.env.HOST || "127.0.0.1",
     () => {
         console.log("Server is running");
     } 
