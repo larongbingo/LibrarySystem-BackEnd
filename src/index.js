@@ -43,13 +43,17 @@ App.use("/graphiql", GraphqlHTTP({
 // Make the server run
 const hostEnv = cfEnv.getAppEnv();
 
-App.listen(
-    hostEnv.port || process.env.PORT || 8080,
-    hostEnv.host || process.env.HOST || "127.0.0.1",
-    () => {
-        console.log("Server is running");
-    } 
-);
+let PORT = 3000;
+let HOST = "127.0.0.1";
+
+if(!hostEnv.isLocal) {
+    PORT = hostEnv.port;
+    HOST = hostEnv.host;
+}
+
+App.listen(PORT, HOST, () => {
+    console.log(`Server starting at port ${PORT} and at host ${HOST}`);
+});
 
 NodeCleanup(function(exitCode, cleanup) {
     console.log("Exiting!");
