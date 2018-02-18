@@ -11,6 +11,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -42,11 +43,7 @@ export default {
         .then(book => {
             return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
                 if(err || !decoded) {
-                    return {
-                        success: false,
-                        iat: Date.now(),
-                        reason: "Invalid Token"
-                    }
+                    return createResponse(false, 3, {reason: "Invalid Token"});
                     // TODO: Refactor everything
                 }
                 else if(decoded.position === 'ADMINISTRATOR' || decoded.position === "STAFF") {
@@ -57,11 +54,7 @@ export default {
                     })
                     .then(session => {
                         if(!session) {
-                            return {
-                                success: true,
-                                iat: Date.now(),
-                                reason: "Token is expired"
-                            }
+                            return createResponse(false, 3, {reason: "Token is expired"});
                         }
 
                         if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
@@ -79,30 +72,20 @@ export default {
                                 bookId: args.bookId
                             })
                             .then(transaction => {
-                                return {
-                                    success: true,
+                                return createResponse(true, 0, {
                                     transactionID: transaction.id,
                                     transactionType: transaction.transactionType,
-                                    transactionRemarks: transaction.transactionRemarks,
-                                    iat: Date.now()
-                                }
+                                    transactionRemarks: transaction.transactionRemarks
+                                })
                             });
                         }
                         else {
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: "Book is currently lended to someone"
-                            }
+                            return createResponse(false, 7, {reason: "Book is currently lended to someone"});
                         }
                     })
                 }
                 else {
-                    return {
-                        success: false,
-                        iat: Date.now(),
-                        reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"
-                    }
+                    return createResponse(false, 8, {reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"}); 
                 }
             })
 

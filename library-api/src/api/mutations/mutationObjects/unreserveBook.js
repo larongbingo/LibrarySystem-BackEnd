@@ -11,6 +11,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 // TODO: Refactor
 
@@ -30,11 +31,7 @@ export default {
     resolve(root, args) {
         return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
             if(err || !decoded) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Invalid Token"
-                }
+                return createResponse(false, 3, {reason: "Invalid Token"});
             }
             else {
                 return DB.models.books.findOne({
@@ -50,26 +47,14 @@ export default {
                     })
                     .then(session => {
                         if(!session) {
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: "Token is expired"
-                            }
+                            return createResponse(false, 4, {reason: "Token is expired"}); 
                         }
                         else {
                             if(typeof book === 'undefined' || book === null) {
-                                return {
-                                    success: false,
-                                    iat: Date.now(),
-                                    reason: "Book does not exist"
-                                }
+                                return createResponse(false, 17, {reason: "Book does not exist"});
                             }
                             else if(book.userId === null && book.userId !== decoded.userId) {
-                                return {
-                                    success: false,
-                                    iat: Date.now(),
-                                    reason: "Book is not reserved to the user"
-                                }
+                                return createResponse(false, 18, {reason: "Book is not reserved to the user"}); 
                             }
                             else {
                                 book.update({
@@ -83,22 +68,14 @@ export default {
                                     bookId: args.bookId
                                 })
                                 .then(transaction => {
-                                    return {
-                                        success: true,
-                                        iat: Date.now(),
-                                        transactionID: transaction.id 
-                                    }
+                                    return createResponse(true, 0, {transactionId: transaction.id});
                                 })
                             }
                         }
                     })
                 })
                 .catch(err => {
-                    return {
-                        success: false,
-                        iat: Date.now(),
-                        reason: "Error occurred"
-                    }
+                    return createResponse(false, 1, {reason: "Error occurred"}); 
                 })
             }
         });

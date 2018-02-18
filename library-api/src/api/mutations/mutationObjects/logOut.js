@@ -5,6 +5,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -18,11 +19,7 @@ export default {
     resolve(root, args) {
         return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
             if(err || !decoded) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Invalid Token"
-                }
+                return createResponse(false, 3, {reason: "Invalid Token"});
             }
             else {
                 return DB.models.sessions.findOne({
@@ -32,19 +29,12 @@ export default {
                 })
                 .then(session => {
                     if(!session) {
-                        return {
-                            success: false,
-                            iat: Date.now(),
-                            reason: "No such user exists or logged in"
-                        }
+                        return createResponse(false, 12, {reason: "No such user logged in"}); 
                     }
 
                     return session.destroy()
                     .then(() => {
-                        return {
-                            success: true,
-                            iat: Date.now()
-                        }
+                        return createResponse(true, 0, {message: "Logged out successfully"});
                     });
                 })
             }

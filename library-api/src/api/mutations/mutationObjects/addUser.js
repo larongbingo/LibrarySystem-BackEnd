@@ -10,6 +10,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -69,11 +70,7 @@ export default {
                             password: args.password
                         })
                         .then((user) => {
-                            return {
-                                success: true,
-                                iat: Date.now(),
-                                userId: user.id           
-                            }
+                            return createResponse(true, 0, {userId: user.id});
                         })
                     }
                     else {
@@ -88,11 +85,7 @@ export default {
                                     password: args.password
                                 })
                                 .then((user) => {
-                                    return {
-                                        success: true,
-                                        iat: Date.now(),
-                                        userId: user.id           
-                                    }
+                                    return createResponse(true, 0, {userId: user.id});
                                 })
                             }
                             
@@ -105,12 +98,7 @@ export default {
                                 password: args.password
                             })
                             .then((user) => {
-                                return {
-                                    success: true,
-                                    iat: Date.now(),
-                                    userId: user.id           
-                                }
-                                //return `{addUserStatus:true,iat:${Date.now()},id:${user.id}}`;
+                                return createResponse(true, 0, {userId: user.id});
                             })
                         })
                     }
@@ -118,12 +106,7 @@ export default {
                 })
             }
             else {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Username already taken"
-                }
-                //return `{addUserStatus:false,iat:${Date.now()},reason:'username already taken'}`
+                return createResponse(false, 6, {reason: "username already taken"}); 
             }
         })
     }

@@ -10,6 +10,7 @@ import {
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
+import createResponse from "./helpers/createResponse";
 
 export default {
     type: GraphQLJSON,
@@ -27,11 +28,7 @@ export default {
     resolve(root, args) {
         return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
             if(err || !decoded) {
-                return {
-                    success: false,
-                    iat: Date.now(),
-                    reason: "Invalid Token"
-                }
+                return createResponse(false, 3, {reason: "Invalid Token"}); 
             }
             else {
                 return DB.models.users.findOne({
@@ -47,19 +44,11 @@ export default {
                     })
                     .then(session => {
                         if(!session) {
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: "Token is expired"
-                            }
+                            return createResponse(false, 4, {reason: "Token is expired"}); 
                         }
 
                         if(!user) {
-                            return {
-                                success: false,
-                                iat: Date.now(),
-                                reason: "User does not exist"
-                            }
+                            return createResponse(false, 9, {reason: "User does not exist"}); 
                         }
                         else {
                             return DB.models.transactions.create({
@@ -81,12 +70,10 @@ export default {
                                 .then(session => {
                                     session.destroy();
 
-                                    return {
-                                        success: true,
-                                        iat: Date.now(),
+                                    return createResponse(true, 0, {
                                         transactionType: transaction.transactionType,
                                         transactionRemarks: transaction.transactionRemarks
-                                    }
+                                    });
                                 })
                             })
                         }

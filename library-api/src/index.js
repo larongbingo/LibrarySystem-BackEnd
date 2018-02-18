@@ -14,6 +14,14 @@ import DB from "./db/dbMap";
 
 const App = Express();
 
+DB.models.sessions.findAll()
+.then(sessions => {
+    sessions.forEach((session, i) => {
+        console.log(session);
+        session.destroy();
+    })
+})
+
 // Enables all Routes to have CORS Requests 
 App.use(CORS());
 
