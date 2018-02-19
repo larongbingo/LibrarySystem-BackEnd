@@ -17,7 +17,7 @@ const App = Express();
 
 DB.models.sessions.findAll()
 .then(sessions => {
-    sessions.forEach((session, i) => {
+    sessions.forEach(function(session) {
         console.log(session);
         session.destroy();
     })
@@ -57,6 +57,7 @@ if(!hostEnv.isLocal) {
 
 App.listen(PORT, HOST, () => {
     console.log(`Server starting at port ${PORT} and at host ${HOST}`);
+    console.log(`Mode at ${process.env.NODE_ENV}`);
 });
 
 NodeCleanup(function(exitCode, cleanup) {
