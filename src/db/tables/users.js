@@ -4,7 +4,7 @@
  */
 
 import { STRING } from "sequelize";
-import { hashSync } from "bcrypt-nodejs";
+import { hashSync } from "bcryptjs";
 import DB from "../dbConn";
 
 const Users = DB.define("users", {

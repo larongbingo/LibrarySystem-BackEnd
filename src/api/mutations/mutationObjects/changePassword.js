@@ -11,7 +11,7 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
-import Bcrypt from "bcrypt-nodejs";
+import Bcrypt from "bcryptjs";
 
 export default {
     type: GraphQLJSON,
