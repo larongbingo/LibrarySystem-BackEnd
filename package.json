@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "private": true,
   "scripts": {
-    "build": "rimraf ./build/ && babel ./src --out-dir build/",
+    "build": "rimraf build && webpack",
     "start": "node ./build/index.js",
     "db-cli": "mysql -u admin -pb0bski123 --host sl-us-south-1-portal.19.dblayer.com --port 35234 --ssl-mode=REQUIRED LibrarySystems",
     "db-sync": "node ./build/lib/syncDB.js",
@@ -14,7 +14,7 @@
   "author": "DCIT101",
   "license": "MIT",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "cfenv": "^1.0.4",
     "cors": "^2.8.4",
     "express": "^4.16.2",
@@ -31,10 +31,16 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
     "faker": "^4.1.0",
     "graphiql": "^0.11.11",
-    "lodash": "^4.17.5"
+    "lodash": "^4.17.5",
+    "octal-number-loader": "^0.1.4",
+    "webpack": "^3.11.0"
   },
   "engines": {
     "node": "8.9.4",
