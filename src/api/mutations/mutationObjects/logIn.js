@@ -9,7 +9,7 @@ import {
 } from "graphql"
 import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
-import { hashSync, compareSync } from "bcrypt-nodejs";
+import { hashSync, compareSync } from "bcryptjs";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
 
