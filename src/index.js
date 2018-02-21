@@ -44,17 +44,17 @@ App.get("/", function(req, res, next) {
     res.send("<h1>This is the API server of the Library System</h1>")
 });
 
-// Make the server run
 const hostEnv = cfEnv.getAppEnv();
 
 let PORT = 3000;
 let HOST = "127.0.0.1";
 
 if(!hostEnv.isLocal) {
-    PORT = hostEnv.port;
-    HOST = hostEnv.host;
+    PORT = hostEnv.port || process.env.PORT;
+    HOST = hostEnv.bind || process.env.HOST;
 }
 
+// Make the server run
 App.listen(PORT, HOST, () => {
     console.log(`Server starting at port ${PORT} and at host ${HOST}`);
     console.log(`Mode at ${process.env.NODE_ENV}`);
