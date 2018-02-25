@@ -33,7 +33,7 @@ Licensed using MIT
 ## NPM Scripts
 * `npm run build`
     * Builds the API Server, database tables syncing, and random data generation scripts.
-    * If there's an environment variable called 
+    * If there's an environment variable called NODE_ENV and has a value of 'production' it will use the values at DB_HOSTNAME, DB_PORT, DB_USERNAME, and DB_PASSWORD
 * `npm run start`
     * Starts the API Server
 * `npm run db-cli`
