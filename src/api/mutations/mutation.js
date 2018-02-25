@@ -12,8 +12,7 @@ import BorrowBookObject from "./mutationObjects/borrowBook";
 import ReturnBookObject from "./mutationObjects/returnBook";
 import ReserveBookObject from "./mutationObjects/reserveBook";
 import UnreserveBookObject from "./mutationObjects/unreserveBook";
-import ChangePasswordObject from "./mutationObjects/changePassword";
-import ChangeUsernameObject from "./mutationObjects/changeUsername";
+import ChangeAccountInfoObject from "./mutationObjects/changeAccountInfo";
 
 process.env.SECRET_KEY = "This is a test for the super secret key";
 
@@ -30,8 +29,7 @@ export default new GraphQLObjectType({
             returnBook: ReturnBookObject,
             reserveBook: ReserveBookObject,
             unreserveBook: UnreserveBookObject,
-            changePassword: ChangePasswordObject,
-            changeUsername: ChangeUsernameObject
+            changeAccountInfo: ChangeAccountInfoObject
         };
     }
 });
