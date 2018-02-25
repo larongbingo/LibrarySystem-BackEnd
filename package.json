@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rimraf build && webpack",
     "start": "node ./build/index.js",
-    "db-cli": "mysql -u admin -pb0bski123 --host sl-us-south-1-portal.19.dblayer.com --port 35234 --ssl-mode=REQUIRED LibrarySystems",
+    "db-cli": "mysql -u %DB_USERNAME% -p%DB_PASSWORD% --host %DB_HOSTNAME% --port %DB_PORT% --ssl-mode=REQUIRED LibrarySystems",
     "db-sync": "node ./build/lib/syncDB.js",
     "db-rand": "node ./build/lib/genRandData.js"
   },

@@ -37,7 +37,11 @@ module.exports = {
             }
         }),*/
         new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            "process.env.DB_HOSTNAME": JSON.stringify(process.env.DB_HOSTNAME),
+            "process.env.DB_PORT": JSON.stringify(process.env.DB_PORT),
+            "process.env.DB_PASSWORD": JSON.stringify(process.env.DB_PASSWORD),
+            "process.env.DB_USERNAME": JSON.stringify(process.env.DB_USERNAME)
         })
     ],
     target: "node",
