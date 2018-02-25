@@ -16,6 +16,7 @@ This is the API Server of the Library System.
     * Faker (Generating Testing Data)
     * Lodash 
     * MySQL2 (MySQL Driver)
+    * Webpack (Transpiling and compression)
 * MySQL (Any SQL Client will do, as long as you change `dialect` at `src/db/dbConn`)
 
 ## Set Up
