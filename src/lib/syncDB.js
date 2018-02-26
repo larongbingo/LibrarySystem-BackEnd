@@ -23,13 +23,22 @@ DB.sync({force: true}).then(() => {
             author: "Testing Author",
             ISBN: "TESTING-ISBN-TEST",
             isBorrowed: false
-        });
+        })
+        .then(book => {
+            if(process.env.NODE_ENV === "production")
+                book.destroy();
+        })
     }).then(() => {
         return TransactionsTable.create({
             transactionType: "TESTING",
             transactionRemarks: "This is a test"
-        });
+        })
+        .then(transaction => {
+            if(process.env.NODE_ENV === "production")
+                transaction.destroy();
+        })
     }).then(() => {
+        DB.close();
         process.exit(0);
     })
 });
