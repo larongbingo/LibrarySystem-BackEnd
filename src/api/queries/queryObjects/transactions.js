@@ -70,17 +70,22 @@ export default {
                         return [{transactionRemarks: JSON.stringify(STATUS_MSG["4"])}];
                     }
                     else {
-                        FIELDS.forEach(element => {
-                            if(args[element[0]]) {
-                                query[element[0]] = {
-                                    [element[1]]: (element[2]) ? (element[2])(args[element[0]]) : args[element[0]]
+                        if(decoded.position === "ADMINISTRATOR" || decoded.position === "STAFF") {
+                            FIELDS.forEach(element => {
+                                if(args[element[0]]) {
+                                    query[element[0]] = {
+                                        [element[1]]: (element[2]) ? (element[2])(args[element[0]]) : args[element[0]]
+                                    }
                                 }
-                            }
-                        });
-                
-                        console.log(query);
-                
-                        return DB.models.transactions.findAll({where: query});
+                            });
+                    
+                            console.log(query);
+                    
+                            return DB.models.transactions.findAll({where: query});
+                        }
+                        else {
+                            return [{transactionRemarks: JSON.stringify(STATUS_MSG["5"])}];
+                        }
                     }
                 })
             }
