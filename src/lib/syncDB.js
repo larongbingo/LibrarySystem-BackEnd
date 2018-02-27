@@ -11,7 +11,7 @@ import TransactionsTable from "../db/tables/transactions";
 
 DB.sync({force: true}).then(() => {
     return UsersTable.create({
-        firstName: 'admin',
+        firstName: 'admin', 
         lastName: 'admin',
         userID: 'ADMIN0001',
         userType: "ADMINISTRATOR",
@@ -39,6 +39,7 @@ DB.sync({force: true}).then(() => {
         })
     }).then(() => {
         DB.close();
+        console.log('exiting')
         process.exit(0);
     })
 });
