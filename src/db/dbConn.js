@@ -8,9 +8,9 @@ import Sequelize from "sequelize";
 let conn;
 
 if(process.env.NODE_ENV === "production") {
-    conn = new Sequelize("LibrarySystems", "admin", "b0bski123", {
-        host: "sl-us-south-1-portal.19.dblayer.com",
-        port: "35234",
+    conn = new Sequelize("LibrarySystems", process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+        host: process.env.DB_HOSTNAME,
+        port: process.env.DB_PORT,
         dialect: "mysql"
     });
 }

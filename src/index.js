@@ -13,6 +13,11 @@ import NodeCleanup from "node-cleanup";
 import DB from "./db/dbMap";
 import cfEnv from "cfenv";
 
+NodeCleanup(function(exitCode, cleanup) {
+    console.log(`Exiting! Exit Code at ${exitCode} and CleanUp at ${cleanup}`);
+    DB.close();
+});
+
 const App = Express();
 
 DB.models.sessions.findAll()
@@ -60,7 +65,3 @@ App.listen(PORT, HOST, () => {
     console.log(`Mode at ${process.env.NODE_ENV}`);
 });
 
-NodeCleanup(function(exitCode, cleanup) {
-    console.log("Exiting!");
-    DB.close();
-})

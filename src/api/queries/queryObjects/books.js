@@ -9,8 +9,22 @@ import {
     GraphQLString,
     GraphQLBoolean
 } from "graphql";
+import { Op } from "sequelize";
 import BooksObject from "../../tables/books";
 import DB from "../../../db/dbMap";
+
+function percentify(str) {
+    return '%' + str + '%';
+}
+
+const FIELDS = [
+    ["id", Op.eq],
+    ["title", Op.like, percentify],
+    ["author", Op.like, percentify],
+    ["ISBN", Op.like, percentify],
+    ["isBorrowed", Op.eq],
+    ["userId", Op.eq]
+];
 
 export default {
     description: "Returns a list of books",
@@ -42,6 +56,20 @@ export default {
         }
     },
     resolve(root, args) {
-        return DB.models.books.findAll({where: args});
+        let query = {}
+
+        FIELDS.forEach(element => {
+            if(args[element[0]]) {
+                query[element[0]] = {
+                    [element[1]]: (element[2]) ? (element[2])(args[element[0]]) : args[element[0]]
+                }
+            }
+        });
+
+        console.log(query);
+
+        return DB.models.books.findAll({
+            where: query
+        });
     }
 }

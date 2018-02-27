@@ -10,6 +10,19 @@ import {
 } from "graphql";
 import UsersObject from "../../tables/users";
 import DB from "../../../db/dbMap";
+import { Op } from "sequelize";
+
+function percentify(str) {
+    return '%' + str + '%';
+}
+
+const FIELDS = [
+    ["id", Op.eq],
+    ["userId", Op.eq],
+    ["firstName", Op.like, percentify],
+    ["lastName", Op.like, percentify],
+    ["userType", Op.like, percentify]
+]
 
 export default {
     description: "Returns a list of users",
@@ -37,6 +50,18 @@ export default {
         }
     },
     resolve(root, args) {
-        return DB.models.users.findAll({where: args});
+        let query = {}
+
+        FIELDS.forEach(element => {
+            if(args[element[0]]) {
+                query[element[0]] = {
+                    [element[1]]: (element[2]) ? (element[2])(args[element[0]]) : args[element[0]]
+                }
+            }
+        });
+
+        console.log(query);
+
+        return DB.models.users.findAll({where: query});
     }
 }

@@ -11,7 +11,7 @@ import TransactionsTable from "../db/tables/transactions";
 
 DB.sync({force: true}).then(() => {
     return UsersTable.create({
-        firstName: 'admin',
+        firstName: 'admin', 
         lastName: 'admin',
         userID: 'ADMIN0001',
         userType: "ADMINISTRATOR",
@@ -23,13 +23,23 @@ DB.sync({force: true}).then(() => {
             author: "Testing Author",
             ISBN: "TESTING-ISBN-TEST",
             isBorrowed: false
-        });
+        })
+        .then(book => {
+            if(process.env.NODE_ENV === "production")
+                book.destroy();
+        })
     }).then(() => {
         return TransactionsTable.create({
             transactionType: "TESTING",
             transactionRemarks: "This is a test"
-        });
+        })
+        .then(transaction => {
+            if(process.env.NODE_ENV === "production")
+                transaction.destroy();
+        })
     }).then(() => {
+        DB.close();
+        console.log('exiting')
         process.exit(0);
     })
 });
