@@ -22,5 +22,16 @@ export default DB.define("books", {
     isBorrowed: {
         type: BOOLEAN,
         allowNull: true
+    },
+    isActive: {
+        type: BOOLEAN,
+        allowNull: false
+    }
+},
+{
+    hooks: {
+        beforeCreate: (book, option) => {
+            book.isActive = true;
+        }
     }
 });
