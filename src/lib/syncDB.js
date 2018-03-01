@@ -15,7 +15,8 @@ DB.sync({force: true})
         userID: 'ADMIN0001',
         userType: "ADMINISTRATOR",
         username: "admin",
-        password: "admin"
+        password: "admin",
+        isActive: true
     });
 })
 .then(() => {

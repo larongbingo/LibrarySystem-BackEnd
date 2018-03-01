@@ -21,7 +21,8 @@ DB.sync({force: true})
         userID: 'ADMIN0001',
         userType: "ADMINISTRATOR",
         username: "admin",
-        password: "admin"
+        password: "admin",
+        isActive: true
     })
     .then(() => {
         // Generate 10 Random Accounts
@@ -35,7 +36,8 @@ DB.sync({force: true})
                 userID: i,
                 userType: "USER",
                 username: Faker.internet.userName(firstName, lastName),
-                password: Faker.internet.password(8, true)
+                password: Faker.internet.password(8, true),
+                isActive: true
             };
             
             // Log out their credentials
