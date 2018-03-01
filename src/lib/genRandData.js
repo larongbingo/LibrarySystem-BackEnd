@@ -52,7 +52,8 @@ DB.sync({force: true})
             title: "Testing Book",
             author: "Testing Author",
             ISBN: "TESTING-ISBN-TEST",
-            isBorrowed: false
+            isBorrowed: false,
+            isActive: true
         })
     })
     .then(() => {
@@ -65,7 +66,8 @@ DB.sync({force: true})
                     min: 0,
                     max: 1000000000
                 }),
-                isBorrowed: false
+                isBorrowed: false,
+                isActive: true
             })
         })
     })
