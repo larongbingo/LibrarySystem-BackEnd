@@ -1,7 +1,7 @@
 # Library API
 This is the API Server of the Library System.
 
-Licensed using MIT
+Licensed using GNU AGPL-3.0+
 
 ## Stack
 * NodeJS (Server Language)
