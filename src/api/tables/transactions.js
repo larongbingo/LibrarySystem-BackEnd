@@ -10,8 +10,8 @@ import {
 } from "graphql";
 
 export default new GraphQLObjectType({
-    name: "Transactions",
-    description: "Returns the transactions of all users",
+    name: "Transaction",
+    description: "Holds the transaction of a users",
     fields: () => {
         return {
             id: {

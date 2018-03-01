@@ -7,6 +7,7 @@ import Sequelize from "sequelize";
 
 let conn;
 
+// Assign the database connection to the IBM Cloud if for production
 if(process.env.NODE_ENV === "production") {
     conn = new Sequelize("LibrarySystems", process.env.DB_USERNAME, process.env.DB_PASSWORD, {
         host: process.env.DB_HOSTNAME,

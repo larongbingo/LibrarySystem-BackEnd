@@ -14,6 +14,7 @@ import SessionsTable from "../db/tables/sessions";
 
 DB.sync({force: true})
 .then(() => {
+    // Create the Admin Account
     UsersTable.create({
         firstName: 'admin',
         lastName: 'admin',
@@ -23,6 +24,7 @@ DB.sync({force: true})
         password: "admin"
     })
     .then(() => {
+        // Generate 10 Random Accounts
         return _.times(10, (i) => {
             let firstName = Faker.name.firstName();
             let lastName = Faker.name.lastName(); 
@@ -35,13 +37,15 @@ DB.sync({force: true})
                 username: Faker.internet.userName(firstName, lastName),
                 password: Faker.internet.password(8, true)
             };
-    
+            
+            // Log out their credentials
             console.log(userData);
     
             return UsersTable.create(userData);
         })
     })
     .then(() => {
+        // Create the testing book
         return BooksTable.create({
             title: "Testing Book",
             author: "Testing Author",
@@ -50,6 +54,7 @@ DB.sync({force: true})
         })
     })
     .then(() => {
+        // Generate 10 Random Books
         return _.times(10, (i) => {
             BooksTable.create({
                 title: Faker.hacker.adjective(),
@@ -63,12 +68,14 @@ DB.sync({force: true})
         })
     })
     .then(() => {
+        // Create a testing transaction
         return TransactionsTable.create({
             transactionType: "TESTING",
             transactionRemarks: "This is a test"
         })
     })
     .then(() => {
+        // Testing the Sessions Table
         return SessionsTable.create({
             token: "THIS IS A TESTING TOKEN"
         })

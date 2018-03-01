@@ -8,6 +8,7 @@ import DB from "../db/dbMap";
 
 DB.sync({force: true})
 .then(() => {
+    // Create the Admin Account
     return DB.models.users.create({
         firstName: 'admin', 
         lastName: 'admin',

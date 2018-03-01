@@ -11,7 +11,7 @@ import {
 } from "graphql";
 
 export default new GraphQLObjectType({
-    name: "Books",
+    name: "Book",
     description: "Returns data about the books in the library",
     fields: () => {
         return {

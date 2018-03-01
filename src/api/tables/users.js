@@ -13,7 +13,7 @@ import BooksObject from "./books";
 
 export default new GraphQLObjectType({
     name: "Users",
-    description: "Returns data the user/s",
+    description: "Holds the data of a user",
     fields: () => {
         return {
             id: {
