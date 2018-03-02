@@ -2,6 +2,7 @@ import createResponse from "./createResponse";
 
 const STATUS_CODES = {
     1: createResponse(false, 1, {reason: "Internal Error Occurred, try again later"}),
+    2: createResponse(false, 2, {reason: "User does not exist"}),
     3: createResponse(false, 3, {reason: "Invalid Token"}),
     4: createResponse(false, 4, {reason: "Expired Token"}),
     5: createResponse(false, 5, {reason: "Invalid userType"}),
