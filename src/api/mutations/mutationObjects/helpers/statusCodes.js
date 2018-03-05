@@ -18,7 +18,10 @@ const STATUS_CODES = {
     15: createResponse(false, 15, {reason: "Book is not yet borrowed"}),
     16: createResponse(false, 16, {reason: "Returning of a book must be validated by a staff or admin"}),
     17: createResponse(false, 17, {reason: "Book does not exist"}),
-    18: createResponse(false, 18, {reason: "Book is not reserved to the requestee"})
+    18: createResponse(false, 18, {reason: "Book is not reserved to the requestee"}),
+    19: createResponse(false, 19, {reason: "Depracated API/Route"}),
+    20: createResponse(false, 20, {reason: "An admin or staff can only add books to the system"}),
+    21: createResponse(false, 21, {reason: "The account must be an admin or a staff userType/accountType"}) // Will be used to replace #16, #8, and # 20
 };
 
 export default STATUS_CODES;
