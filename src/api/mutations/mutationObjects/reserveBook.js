@@ -12,6 +12,8 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import verifyAccount from "./helpers/accountVerifier";
+import STATUS_MSG from "./helpers/statusCodes";
 
 export default {
     type: GraphQLJSON,
@@ -27,55 +29,46 @@ export default {
         }
     },
     resolve(root, args) {
-        // TODO: Refactor, code too long
-        return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
-            
-            // Check if theres no error during decryption
-            if(err || !decoded) {
-                return createResponse(false, 3, {reason: "Invalid Token"}); 
-            }
-            else {
+        return verifyAccount(args.token)
+        .then(data => {
+            if(data.status_code === 0) {
                 return DB.models.books.findOne({
                     where: {
                         id: args.bookId
                     }
                 })
                 .then(book => {
-                    return DB.models.sessions.findOne({
-                        where: {
-                            token: args.token
-                        }
-                    })
-                    .then(session => {
-                        if(!session) {
-                            return createResponse(false, 4, {reason: "Token is expired"}); 
-                        }
-                        else {
-                            // Check if the book isn't reserved or borrowed by anyone
-                            if(book.userId === null) {
-                                book.update({
-                                    userId: decoded.userId
-                                });
+                    // Check if the book does exist
+                    if(!book) {
+                        return STATUS_MSG["17"];
+                    }
 
-                                return DB.models.transactions.create({
-                                    transactionType: "RESERVING BOOK",
-                                    transactionRemarks: `user#${decoded.userId} reserves book#${args.bookId}`,
-                                    bookId: args.bookId,
-                                    userId: decoded.userId
-                                })
-                                .then((transaction) => {
-                                    return createResponse(true, 0, {transactionId: transaction.id});
-                                })
-                            } 
-                            else {
-                                return createResponse(false, 13, {reason: "Book is borrowed or reserved by somebody"});
-                            }
-                        }
+                    // Check if the book is not reserved or borrowed by anyone
+                    if(book.userId || book.isBorrowed) {
+                        return STATUS_MSG["13"];
+                    }
+
+                    // Update Book to reserved
+                    book.update({
+                        userId: data.decoded.userId
+                    });
+
+                    // Create a record to transactions table
+                    return DB.models.transactions.create({
+                        transactionType: "RESERVING BOOK",
+                        transactionRemarks: `user#${data.decoded.userId} reserves book#${args.bookId}`,
+                        bookId: args.bookId,
+                        userId: data.decoded.userId
                     })
-                })
-                .catch(err => {
-                    return createResponse(false, 1, {reason: "Error occurred"}); 
-                })
+                    .then(transaction => {
+                        return createResponse(true, 0, {
+                            transaction: transaction.id
+                        });
+                    });
+                });
+            }
+            else {
+                return STATUS_MSG[String(data)];
             }
         });
     }
