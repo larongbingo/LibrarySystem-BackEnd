@@ -11,6 +11,8 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import STATUS_MSG from "./helpers/statusCodes";
+import verifyAccount from "./helpers/accountVerifier";
 
 export default {
     type: GraphQLJSON,
@@ -34,41 +36,29 @@ export default {
         }
     },
     resolve(root, args) {
-        // Check if token is valid
-        return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {    
-            if(err || !decoded) {
-                return createResponse(true, 3, {reason: "Invalid Token"});
+        return verifyAccount(args.token)
+        .then(data => {
+            if(data.status_code === 0) {
+                if(data.isAdminOrStaff) {
+                    return DB.models.books.create({
+                        title: args.title,
+                        author: args.author,
+                        ISBN: args.ISBN,
+                        isBorrowed: false,
+                        isActive: true
+                    })
+                    .then(book => {
+                        return createResponse(true, 0, {bookId: book.id});
+                    });
+                }
+                else {
+                    // Send a message that user doesn't have admin or staff privilege
+                    return STATUS_MSG["20"];
+                }
             }
-
-            // Check if the position is 'ADMINISTRATOR' or 'STAFF'
-            if(decoded.position === "ADMINISTRATOR" || decoded.position === "STAFF") {
-                // Check if the token is in Sessions Table
-                return DB.models.sessions.findOne({
-                    where: {
-                        token: args.token
-                    }
-                })
-                .then(session => {
-                    if(session) {
-                        // Store to DB the new book details
-                        return DB.models.books.create({
-                            title: args.title,
-                            author: args.author,
-                            ISBN: args.ISBN,
-                            isBorrowed: false
-                        })
-                        .then((book) => {
-                            // Return success
-                            return createResponse(true, 0, {bookId: book.id});
-                        });
-                    }
-                    else {
-                        return createResponse(false, 4, {reason: "Token is expired"});
-                    }
-                })
+            else {
+                return STATUS_MSG[String(data)];
             }
-            
-            return createResponse(false, 5, {reason: "Invalid Token, only ADMINS or STAFFS can add books"});
         });
     }
 }
