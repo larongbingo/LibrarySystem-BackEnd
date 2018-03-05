@@ -40,16 +40,20 @@ export default {
         return verifyAccount(args.token)
         .then(data => {
             if(data.status_code === 0) {
+                
+                // Check if the accoun is ADMIN or STAFF
                 if(!data.isAdminOrStaff) {
                     return STATUS_MSG["8"];
                 }
 
+                // Query for the book
                 return DB.models.books.findOne({
                     where: {
                         id: args.bookId
                     }
                 })
                 .then(book => {
+
                     // Check if the book exists in the database
                     if(!book) {
                         return STATUS_MSG["17"];
@@ -75,6 +79,7 @@ export default {
                             bookId: args.bookId
                         })
                         .then(transaction => {
+                            // Send a response to the user that marking book borrowed is complete
                             return createResponse(true, 0, {
                                 transactionID: transaction.id,
                                 transactionType: transaction.transactionType,
