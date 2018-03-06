@@ -29,10 +29,8 @@ import {
 import UsersObject from "../../tables/users";
 import DB from "../../../db/dbMap";
 import { Op } from "sequelize";
-
-function percentify(str) {
-    return '%' + str + '%';
-}
+import percentify from "./helpers/percentify";
+import queryCreator from "./helpers/queryCreator";
 
 const FIELDS = [
     ["id", Op.eq],
@@ -68,18 +66,7 @@ export default {
         }
     },
     resolve(root, args) {
-        let query = {}
-
-        FIELDS.forEach(element => {
-            if(args[element[0]]) {
-                query[element[0]] = {
-                    [element[1]]: (element[2]) ? (element[2])(args[element[0]]) : args[element[0]]
-                }
-            }
-        });
-
-        console.log(query);
-
+        let query = queryCreator(FIELDS, args);
         return DB.models.users.findAll({where: query});
     }
 }
