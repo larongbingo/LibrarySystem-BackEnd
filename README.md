@@ -46,6 +46,7 @@ Licensed using GNU AGPL-3.0+
 ## License
 The Library System Back End, handles all of the CRUD operations
 of the CvSU Imus Library System
+
 Copyright (C) 2018  Renz Christen Yeomer A. Pagulayan
 
 This program is free software: you can redistribute it and/or modify
