@@ -66,6 +66,13 @@ export default new GraphQLObjectType({
                 resolve(transaction) {
                     return transaction.bookId;
                 }
+            },
+            createdAt: {
+                description: "The date at which the object has been created",
+                type: GraphQLString,
+                resolve(transaction) {
+                    return String(transaction.createdAt);
+                }
             }
         };
     }
