@@ -23,7 +23,8 @@
  * Columns: 
  * views_count - The total amount of clicks in a book
  * borrows_count - The total amount of borrows
- * 
+ * reserves_count - The total amount of reserves
+ * unreserves_count - The total amount of cancellation of reserves
  */
 
 import { INTEGER } from "sequelize";
