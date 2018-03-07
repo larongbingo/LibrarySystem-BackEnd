@@ -89,6 +89,17 @@ export default {
                             userId: args.userId
                         });
 
+                        DB.models.bookViews.findOne({
+                            where: {
+                                id: book.id
+                            }
+                        })
+                        .then(bookView => {
+                            bookView.update({
+                                borrows_count: bookView.borrows_count + 1
+                            });
+                        });
+
                         // Create transaction object
                         return DB.models.transactions.create({
                             transactionType: "BORROWING BOOK",

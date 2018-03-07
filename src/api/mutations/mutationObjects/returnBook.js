@@ -82,6 +82,19 @@ export default {
                         userId: null
                     });
 
+                    // Find the counter that corresponds to the book
+                    DB.models.bookViews.findOne({
+                        where: {
+                            id: book.id
+                        }
+                    })
+                    .then(bookView => {
+                        // Add 1 to the current value
+                        bookView.update({
+                            returns_count: bookView.returns_count + 1
+                        });
+                    })
+
                      // Create the transaction object
                     return DB.models.transactions.create({
                         transactionType: "RETURNING BOOK",

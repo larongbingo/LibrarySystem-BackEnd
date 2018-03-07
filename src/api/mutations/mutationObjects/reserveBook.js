@@ -71,6 +71,19 @@ export default {
                         userId: data.decoded.userId
                     });
 
+                    // Find the book
+                    DB.models.bookViews.findOne({
+                        where: {
+                            id: book.id
+                        }
+                    })
+                    .then(bookView => {
+                        // Update the counter
+                        bookView.update({
+                            reserves_count: bookView.reserves_count + 1
+                        });
+                    });
+
                     // Create a record to transactions table
                     return DB.models.transactions.create({
                         transactionType: "RESERVING BOOK",
