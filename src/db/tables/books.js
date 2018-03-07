@@ -55,11 +55,11 @@ export default DB.define("books", {
             book.isActive = true;
 
             // Create the corresponding counters 
-            BookViewsTable.create({
-                id: book.id,
+            book.createBookView({
                 views_count: 0,
                 borrows_count: 0,
-                reserves_count: 0
+                reserves_count: 0,
+                unreserves_count: 0
             });
         }
     }
