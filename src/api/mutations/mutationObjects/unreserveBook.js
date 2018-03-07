@@ -79,6 +79,28 @@ export default {
                         userId: null
                     });
 
+                    // Find the corresponding counters for the current book
+                    DB.models.bookViews.findOne({
+
+                        where: {
+
+                            id: book.id
+
+                        }
+
+                    })
+
+                    .then(bookView => {
+
+                        // Add one to the counter
+                        bookView.update({
+
+                            unreserves_count: bookView.unreserves_count + 1
+
+                        });
+
+                    });
+
                     // Create the transaction object
                     return DB.models.transactions.create({
                         transactionType: "UNRESERVE BOOK",
