@@ -58,6 +58,7 @@ export default DB.define("books", {
             book.createBookView({
                 views_count: 0,
                 borrows_count: 0,
+                returns_count: 0,
                 reserves_count: 0,
                 unreserves_count: 0
             });

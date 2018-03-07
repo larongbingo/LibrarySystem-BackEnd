@@ -23,6 +23,7 @@
  * Columns: 
  * views_count - The total amount of clicks in a book
  * borrows_count - The total amount of borrows
+ * returns_count - The total amount of returns
  * reserves_count - The total amount of reserves
  * unreserves_count - The total amount of cancellation of reserves
  */
@@ -36,6 +37,10 @@ const Book_Views = DB.define("bookViews", {
         allowNull: false
     },
     borrows_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    returns_count: {
         type: INTEGER,
         allowNull: false
     },
