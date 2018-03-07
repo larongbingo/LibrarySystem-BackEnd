@@ -1,4 +1,4 @@
-/** 
+/*************************************************************************
  * License
  * The Library System Back End, handles all of the CRUD operations
  * of the CvSU Imus Library System
@@ -16,7 +16,7 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *************************************************************************/
 
 var path = require("path");
 var webpack = require('webpack');
