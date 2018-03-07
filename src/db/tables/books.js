@@ -25,6 +25,7 @@
 
 import { STRING, BOOLEAN } from "sequelize";
 import DB from "../dbConn";
+import BookViewsTable from "./book_views";
 
 export default DB.define("books", {
     title: {
@@ -52,6 +53,14 @@ export default DB.define("books", {
     hooks: {
         beforeCreate: (book, option) => {
             book.isActive = true;
+
+            // Create the corresponding counters 
+            BookViewsTable.create({
+                id: book.id,
+                views_count: 0,
+                borrows_count: 0,
+                reserves_count: 0
+            });
         }
     }
 });
