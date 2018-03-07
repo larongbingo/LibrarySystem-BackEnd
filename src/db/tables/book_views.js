@@ -18,6 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *************************************************************************/
 
+/**
+ * book_views.js
+ * Columns: 
+ * views_count - The total amount of clicks in a book
+ * borrows_count - The total amount of borrows
+ * 
+ */
+
 import { INTEGER } from "sequelize";
 import DB from "../dbConn";
 
@@ -31,6 +39,10 @@ const Book_Views = DB.define("bookViews", {
         allowNull: false
     },
     reserves_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    unreserves_count: {
         type: INTEGER,
         allowNull: false
     }
