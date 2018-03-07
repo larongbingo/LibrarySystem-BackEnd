@@ -13,7 +13,7 @@
     "db-rand": "node ./build/genRandData.js"
   },
   "author": "DCIT101",
-  "license": "MIT",
+  "license": "AGPL-3.0+",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cfenv": "^1.0.4",

@@ -1,6 +1,24 @@
 /**
  * addUser.js
  * Handles all of the process in creating a new account
+ * 
+ * License
+ * The Library System Back End, handles all of the CRUD operations
+ * of the CvSU Imus Library System
+ * Copyright (C) 2018  Renz Christen Yeomer A. Pagulayan
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {
@@ -11,6 +29,8 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import verifyAccount from "./helpers/accountVerifier";
+import STATUS_MSG from "./helpers/statusCodes";
 
 export default {
     type: GraphQLJSON,
@@ -28,11 +48,6 @@ export default {
             type: GraphQLString,
             description: "The id number of the user"
         },
-        userType: {
-            type: new GraphQLNonNull(GraphQLString),
-            description: "The account type or class",
-            depracationReason: "Instead of marking each user a userType, the API will simply check if the token is an ADMIN or a STAFF"
-        },
         username: {
             type: new GraphQLNonNull(GraphQLString),
             description: "The username of the account"
@@ -47,67 +62,70 @@ export default {
         }
     },
     resolve(root, args) {
-        return DB.models.users.find({
-            where: {
-                username: args.username
-            }
-        })
-        .then(user => {
-            if(user === null || typeof user === 'undefined') {
-                return DB.models.sessions.findOne({
-                    where: {
-                        token: args.token
-                    }
-                })
-                .then(session => {
-                    if(!session) {
+        // Check if it has a token
+        if(args.token) {
+            // Check if the token is valid
+            return verifyAccount(args.token) 
+            .then(data => {
+                // Add a new staff account
+                if(data.status_code === 0) {
+                    if(data.decoded.position === "ADMINISTRATOR") {
                         return DB.models.users.create({
                             firstName: args.firstName,
                             lastName: args.lastName,
-                            userID: args.userID,
-                            userType: "USER",
+                            userId: args.userId,
+                            userType: "STAFF",
+                            isActive: true,
                             username: args.username,
                             password: args.password
                         })
-                        .then((user) => {
-                            return createResponse(true, 0, {userId: user.id});
-                        })
+                        .then(userPromiseHandler)
                     }
                     else {
-                        return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
-                            if(err || !decoded) {
-                                return DB.models.users.create({
-                                    firstName: args.firstName,
-                                    lastName: args.lastName,
-                                    userID: args.userID,
-                                    userType: "USER",
-                                    username: args.username,
-                                    password: args.password
-                                })
-                                .then((user) => {
-                                    return createResponse(true, 0, {userId: user.id});
-                                })
-                            }
-                            
-                            return DB.models.users.create({
-                                firstName: args.firstName,
-                                lastName: args.lastName,
-                                userID: args.userID,
-                                userType: "STAFF",
-                                username: args.username,
-                                password: args.password
-                            })
-                            .then((user) => {
-                                return createResponse(true, 0, {userId: user.id});
-                            })
+                        return DB.models.users.create({
+                            firstName: args.firstName,
+                            lastName: args.lastName,
+                            userId: args.userId,
+                            userType: "USER",
+                            isActive: true,
+                            username: args.username,
+                            password: args.password
                         })
+                        .then(userPromiseHandler);
                     }
-
+                }
+                
+                return DB.models.users.create({
+                    firstName: args.firstName,
+                    lastName: args.lastName,
+                    userId: args.userId,
+                    userType: "USER",
+                    isActive: true,
+                    username: args.username,
+                    password: args.password
                 })
-            }
-            else {
-                return createResponse(false, 6, {reason: "username already taken"}); 
-            }
-        })
+                .then(userPromiseHandler)
+            });    
+        }
+        else {
+            return DB.models.users.create({
+                firstName: args.firstName,
+                lastName: args.lastName,
+                userId: args.userId,
+                userType: "USER",
+                isActive: true,
+                username: args.username,
+                password: args.password
+            })
+            .then(userPromiseHandler)
+        }
     }
+}
+
+/**
+ * TODO: Remove Repeating insert statements
+ */
+
+function userPromiseHandler(user) {
+    return createResponse(true, 0, {userId: user.id});
 }

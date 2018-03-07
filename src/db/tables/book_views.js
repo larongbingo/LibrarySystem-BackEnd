@@ -19,19 +19,39 @@
  *************************************************************************/
 
 /**
- * sessions.js
- * Holds all of the valid JWT for the APIs.
- * 
- * Columns:
- * token - The valid JWT token
+ * book_views.js
+ * Columns: 
+ * views_count - The total amount of clicks in a book
+ * borrows_count - The total amount of borrows
+ * returns_count - The total amount of returns
+ * reserves_count - The total amount of reserves
+ * unreserves_count - The total amount of cancellation of reserves
  */
 
-import { STRING } from "sequelize";
+import { INTEGER } from "sequelize";
 import DB from "../dbConn";
 
-export default DB.define("sessions", {
-    token: {
-        type: STRING,
+const Book_Views = DB.define("bookViews", {
+    views_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    borrows_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    returns_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    reserves_count: {
+        type: INTEGER,
+        allowNull: false
+    },
+    unreserves_count: {
+        type: INTEGER,
         allowNull: false
     }
 });
+
+export default Book_Views;

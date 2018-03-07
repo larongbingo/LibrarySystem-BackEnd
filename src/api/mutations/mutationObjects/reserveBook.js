@@ -1,6 +1,24 @@
 /**
  * reserveBook.js
  * Handles all of the requests for marking books 'reserved'
+ * 
+ * License
+ * The Library System Back End, handles all of the CRUD operations
+ * of the CvSU Imus Library System
+ * Copyright (C) 2018  Renz Christen Yeomer A. Pagulayan
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {
@@ -12,6 +30,8 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import verifyAccount from "./helpers/accountVerifier";
+import STATUS_MSG from "./helpers/statusCodes";
 
 export default {
     type: GraphQLJSON,
@@ -27,55 +47,59 @@ export default {
         }
     },
     resolve(root, args) {
-        // TODO: Refactor, code too long
-        return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
-            
-            // Check if theres no error during decryption
-            if(err || !decoded) {
-                return createResponse(false, 3, {reason: "Invalid Token"}); 
-            }
-            else {
+        return verifyAccount(args.token)
+        .then(data => {
+            if(data.status_code === 0) {
                 return DB.models.books.findOne({
                     where: {
                         id: args.bookId
                     }
                 })
                 .then(book => {
-                    return DB.models.sessions.findOne({
-                        where: {
-                            token: args.token
-                        }
-                    })
-                    .then(session => {
-                        if(!session) {
-                            return createResponse(false, 4, {reason: "Token is expired"}); 
-                        }
-                        else {
-                            // Check if the book isn't reserved or borrowed by anyone
-                            if(book.userId === null) {
-                                book.update({
-                                    userId: decoded.userId
-                                });
+                    // Check if the book does exist
+                    if(!book) {
+                        return STATUS_MSG["17"];
+                    }
 
-                                return DB.models.transactions.create({
-                                    transactionType: "RESERVING BOOK",
-                                    transactionRemarks: `user#${decoded.userId} reserves book#${args.bookId}`,
-                                    bookId: args.bookId,
-                                    userId: decoded.userId
-                                })
-                                .then((transaction) => {
-                                    return createResponse(true, 0, {transactionId: transaction.id});
-                                })
-                            } 
-                            else {
-                                return createResponse(false, 13, {reason: "Book is borrowed or reserved by somebody"});
-                            }
+                    // Check if the book is not reserved or borrowed by anyone
+                    if(book.userId || book.isBorrowed) {
+                        return STATUS_MSG["13"];
+                    }
+
+                    // Update Book to reserved
+                    book.update({
+                        userId: data.decoded.userId
+                    });
+
+                    // Find the book
+                    DB.models.bookViews.findOne({
+                        where: {
+                            id: book.id
                         }
                     })
-                })
-                .catch(err => {
-                    return createResponse(false, 1, {reason: "Error occurred"}); 
-                })
+                    .then(bookView => {
+                        // Update the counter
+                        bookView.update({
+                            reserves_count: bookView.reserves_count + 1
+                        });
+                    });
+
+                    // Create a record to transactions table
+                    return DB.models.transactions.create({
+                        transactionType: "RESERVING BOOK",
+                        transactionRemarks: `user#${data.decoded.userId} reserves book#${args.bookId}`,
+                        bookId: args.bookId,
+                        userId: data.decoded.userId
+                    })
+                    .then(transaction => {
+                        return createResponse(true, 0, {
+                            transaction: transaction.id
+                        });
+                    });
+                });
+            }
+            else {
+                return STATUS_MSG[String(data)];
             }
         });
     }

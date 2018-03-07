@@ -1,8 +1,4 @@
-/**
- * syncDB.js
- * Syncs the changes from the ORM to the Database.
- * It only adds the admin account.
- * 
+/*************************************************************************
  * License
  * The Library System Back End, handles all of the CRUD operations
  * of the CvSU Imus Library System
@@ -20,23 +16,15 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ************************************************************************/
+
+
+/**
+ * Returns a string that has a percent(%) symbol at the front and
+ * end of the string given
+ * @param {String} string The string that will be added the percent symbols
+ * @returns {String} The string that has the percent symbols
  */
-
-import DB from "../db/dbMap";
-
-DB.sync({force: true})
-.then(() => {
-    // Create the Admin Account
-    return DB.models.users.create({
-        firstName: 'admin', 
-        lastName: 'admin',
-        userID: 'ADMIN0001',
-        userType: "ADMINISTRATOR",
-        username: "admin",
-        password: "admin",
-        isActive: true
-    });
-})
-.then(() => {
-    process.exit(0);
-})
+export default function percentify(string) {
+    return `%${string}%`;
+}

@@ -1,6 +1,24 @@
 /**
  * borrowBook.js
  * Handles all of the process in marking a book 'borrowed'
+ * 
+ * License
+ * The Library System Back End, handles all of the CRUD operations
+ * of the CvSU Imus Library System
+ * Copyright (C) 2018  Renz Christen Yeomer A. Pagulayan
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 import {
@@ -12,6 +30,8 @@ import GraphQLJSON from "graphql-type-json";
 import DB from "../../../db/dbMap";
 import JWT from "jsonwebtoken";
 import createResponse from "./helpers/createResponse";
+import verifyAccount from "./helpers/accountVerifier";
+import STATUS_MSG from "./helpers/statusCodes";
 
 export default {
     type: GraphQLJSON,
@@ -35,60 +55,72 @@ export default {
         }
     },
     resolve(root, args) {
-        return DB.models.books.findOne({
-            where: {
-                id: args.bookId
+        return verifyAccount(args.token)
+        .then(data => {
+            if(data.status_code === 0) {
+                
+                // Check if the accoun is ADMIN or STAFF
+                if(!data.isAdminOrStaff) {
+                    return STATUS_MSG["8"];
+                }
+
+                // Query for the book
+                return DB.models.books.findOne({
+                    where: {
+                        id: args.bookId
+                    }
+                })
+                .then(book => {
+
+                    // Check if the book exists in the database
+                    if(!book) {
+                        return STATUS_MSG["17"];
+                    }
+
+                    // Check if the book is not borrowed or reserved by anyone
+                    else if(book.userId || book.isBorrowed) {
+                        return STATUS_MSG["13"];
+                    }
+
+                    else {
+                        // Update Book
+                        book.update({
+                            isBorrowed: true,
+                            userId: args.userId
+                        });
+
+                        DB.models.bookViews.findOne({
+                            where: {
+                                id: book.id
+                            }
+                        })
+                        .then(bookView => {
+                            bookView.update({
+                                borrows_count: bookView.borrows_count + 1
+                            });
+                        });
+
+                        // Create transaction object
+                        return DB.models.transactions.create({
+                            transactionType: "BORROWING BOOK",
+                            transactionRemarks: args.transactionRemark,
+                            userId: args.userId,
+                            bookId: args.bookId
+                        })
+                        .then(transaction => {
+                            // Send a response to the user that marking book borrowed is complete
+                            return createResponse(true, 0, {
+                                transactionID: transaction.id,
+                                transactionType: transaction.transactionType,
+                                transactionRemarks: transaction.transactionRemarks
+                            });
+                        });
+                    }
+                });
             }
-        })
-        .then(book => {
-            return JWT.verify(args.token, process.env.SECRET_KEY, null, (err, decoded) => {
-                if(err || !decoded) {
-                    return createResponse(false, 3, {reason: "Invalid Token"});
-                    // TODO: Refactor everything
-                }
-                else if(decoded.position === 'ADMINISTRATOR' || decoded.position === "STAFF") {
-                    return DB.models.sessions.findOne({
-                        where: {
-                            token: args.token
-                        }
-                    })
-                    .then(session => {
-                        if(!session) {
-                            return createResponse(false, 3, {reason: "Token is expired"});
-                        }
-
-                        if(book !== null && typeof book !== 'undefined' && !book.isBorrowed && book.userId === null) {
-                            // Update the book
-                            book.update({
-                                isBorrowed: true,
-                                userId: args.userId
-                            });
-            
-                            // Create a transaction object to transactions table
-                            return DB.models.transactions.create({
-                                transactionType: "BORROWING BOOK",
-                                transactionRemarks: args.transactionRemark,
-                                userId: args.userId,
-                                bookId: args.bookId
-                            })
-                            .then(transaction => {
-                                return createResponse(true, 0, {
-                                    transactionID: transaction.id,
-                                    transactionType: transaction.transactionType,
-                                    transactionRemarks: transaction.transactionRemarks
-                                })
-                            });
-                        }
-                        else {
-                            return createResponse(false, 7, {reason: "Book is currently lended to someone"});
-                        }
-                    })
-                }
-                else {
-                    return createResponse(false, 8, {reason: "The borrowing of a book needs to be validated by a STAFF or an ADMIN"}); 
-                }
-            })
-
+            else {
+                return STATUS_MSG[String(data)];
+            }
         });
     }
 }
