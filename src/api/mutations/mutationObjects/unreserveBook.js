@@ -27,13 +27,7 @@ import {
     GraphQLNonNull
 } from "graphql";
 import GraphQLJSON from "graphql-type-json";
-import DB from "../../../db/dbMap";
-import JWT from "jsonwebtoken";
-import createResponse from "./helpers/createResponse";
-import STATUS_MSG from "./helpers/statusCodes";
-import verifyAccount from "./helpers/accountVerifier";
-
-// TODO: Refactor
+import unreserveBookResolver from "./resolvers/unreserveBookResolver";
 
 export default {
     type: GraphQLJSON,
@@ -48,74 +42,5 @@ export default {
             description: "The token of the user that needs to cancel a reservation"
         }
     },
-    resolve(root, args) {
-        return verifyAccount(args.token)
-        .then(data => {
-            if(data.status_code === 0) {
-                // Find the book
-                return DB.models.books.findOne({
-                    where: {
-                        id: args.bookId
-                    }
-                })
-                .then(book => {
-                    // Check if the book exists
-                    if(!book) {
-                        return STATUS_MSG["17"];
-                    }
-
-                    // Check if the book.userId is STRICTLY equal to data.decoded.userId
-                    if(!book.userId || book.userId !== data.decoded.userId) {
-                        return STATUS_MSG["18"];
-                    }
-
-                    // Check if the book is not yet borrowed
-                    if(book.isBorrowed) {
-                        return STATUS_MSG["13"];
-                    }
-
-                    // Update Book
-                    book.update({
-                        userId: null
-                    });
-
-                    // Find the corresponding counters for the current book
-                    DB.models.bookViews.findOne({
-
-                        where: {
-
-                            id: book.id
-
-                        }
-
-                    })
-
-                    .then(bookView => {
-
-                        // Add one to the counter
-                        bookView.update({
-
-                            unreserves_count: bookView.unreserves_count + 1
-
-                        });
-
-                    });
-
-                    // Create the transaction object
-                    return DB.models.transactions.create({
-                        transactionType: "UNRESERVE BOOK",
-                        transactionRemarks: `user#${data.decoded.userId} cancels reservation to book#${args.bookId}`,
-                        userId: data.decoded.userId,
-                        bookId: args.bookId
-                    })
-                    .then(transaction => {
-                        return createResponse(true, 0, {transactionId: transaction.id});
-                    })
-                })
-            }
-            else {
-                return STATUS_MSG[String(data)];
-            }
-        });
-    }
+    resolve: unreserveBookResolver
 }

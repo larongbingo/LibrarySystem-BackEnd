@@ -26,11 +26,7 @@ import {
     GraphQLNonNull
 } from "graphql";
 import GraphQLJSON from "graphql-type-json";
-import DB from "../../../db/dbMap";
-import JWT from "jsonwebtoken";
-import createResponse from "./helpers/createResponse";
-import verifyAccount from "./helpers/accountVerifier";
-import STATUS_MSG from "./helpers/statusCodes";
+import addUserResolver from "./resolvers/addUserResolver";
 
 export default {
     type: GraphQLJSON,
@@ -61,71 +57,5 @@ export default {
             description: "Allows creation of staff accounts if the given token is valid"
         }
     },
-    resolve(root, args) {
-        // Check if it has a token
-        if(args.token) {
-            // Check if the token is valid
-            return verifyAccount(args.token) 
-            .then(data => {
-                // Add a new staff account
-                if(data.status_code === 0) {
-                    if(data.decoded.position === "ADMINISTRATOR") {
-                        return DB.models.users.create({
-                            firstName: args.firstName,
-                            lastName: args.lastName,
-                            userId: args.userId,
-                            userType: "STAFF",
-                            isActive: true,
-                            username: args.username,
-                            password: args.password
-                        })
-                        .then(userPromiseHandler)
-                    }
-                    else {
-                        return DB.models.users.create({
-                            firstName: args.firstName,
-                            lastName: args.lastName,
-                            userId: args.userId,
-                            userType: "USER",
-                            isActive: true,
-                            username: args.username,
-                            password: args.password
-                        })
-                        .then(userPromiseHandler);
-                    }
-                }
-                
-                return DB.models.users.create({
-                    firstName: args.firstName,
-                    lastName: args.lastName,
-                    userId: args.userId,
-                    userType: "USER",
-                    isActive: true,
-                    username: args.username,
-                    password: args.password
-                })
-                .then(userPromiseHandler)
-            });    
-        }
-        else {
-            return DB.models.users.create({
-                firstName: args.firstName,
-                lastName: args.lastName,
-                userId: args.userId,
-                userType: "USER",
-                isActive: true,
-                username: args.username,
-                password: args.password
-            })
-            .then(userPromiseHandler)
-        }
-    }
-}
-
-/**
- * TODO: Remove Repeating insert statements
- */
-
-function userPromiseHandler(user) {
-    return createResponse(true, 0, {userId: user.id});
+    resolve: addUserResolver
 }

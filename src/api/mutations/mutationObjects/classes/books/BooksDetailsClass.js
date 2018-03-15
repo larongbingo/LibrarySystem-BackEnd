@@ -1,7 +1,4 @@
-/**
- * logOut.js
- * Handles all of the requests for removing the token in the sessions
- * 
+/*************************************************************************
  * License
  * The Library System Back End, handles all of the CRUD operations
  * of the CvSU Imus Library System
@@ -19,23 +16,19 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *************************************************************************/
+
+/**
+ * Holds all of the details for all instaces of books
  */
-
-import {
-    GraphQLString,
-    GraphQLNonNull
-} from "graphql";
-import GraphQLJSON from "graphql-type-json";
-import logOutResolver from "./resolvers/logOutResolver";
-
-export default {
-    type: GraphQLJSON,
-    description: "Removes the session of the user in the APIs Session Holder",
-    args: {
-        token: {
-            type: new GraphQLNonNull(GraphQLString),
-            description: "The token that will be used to log out the user and delete a session"
-        }
-    },
-    resolve: logOutResolver
+class BooksDetails {
+    constructor(args) {
+        this.title = args.title;
+        this.author = args.author;
+        this.ISBN = args.ISBN;
+        this.isBorrowed = false;
+        this.isActive = true;
+    }
 }
+
+export default BooksDetails;
