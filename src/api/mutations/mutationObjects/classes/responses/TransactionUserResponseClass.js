@@ -1,7 +1,4 @@
-/**
- * logOut.js
- * Handles all of the requests for removing the token in the sessions
- * 
+/*************************************************************************
  * License
  * The Library System Back End, handles all of the CRUD operations
  * of the CvSU Imus Library System
@@ -19,23 +16,26 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *************************************************************************/
+
+import UserResponse from "./UserResponseClass";
+
+/**
+ * Holds all of the details a user needs to see
+ * based on a given transaction object
  */
-
-import {
-    GraphQLString,
-    GraphQLNonNull
-} from "graphql";
-import GraphQLJSON from "graphql-type-json";
-import logOutResolver from "./resolvers/logOutResolver";
-
-export default {
-    type: GraphQLJSON,
-    description: "Removes the session of the user in the APIs Session Holder",
-    args: {
-        token: {
-            type: new GraphQLNonNull(GraphQLString),
-            description: "The token that will be used to log out the user and delete a session"
-        }
-    },
-    resolve: logOutResolver
+class TransactionUserResponse extends UserResponse {
+    /**
+     * Creates a bew TransactionUserResponse Object
+     * @param {Object} transaction The instance of transaction at transactions table
+     */
+    constructor(transaction) {
+        super(true, 0, {
+            transactionID: transaction.id,
+            transactionType: transaction.transactionType,
+            transactionRemarks: transaction.transactionRemarks
+        });
+    }
 }
+
+export default TransactionUserResponse;

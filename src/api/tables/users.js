@@ -30,7 +30,7 @@ import {
 import BooksObject from "./books";
 
 export default new GraphQLObjectType({
-    name: "Users",
+    name: "User",
     description: "Holds the data of a user",
     fields: () => {
         return {
