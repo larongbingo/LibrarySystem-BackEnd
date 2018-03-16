@@ -28,4 +28,4 @@ class StaffBorrowReturnTransactionDetails extends TransactionDetails {
     }
 }
 
-export default BorrowingTransactionDetails;
+export default StaffBorrowReturnTransactionDetails;
