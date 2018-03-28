@@ -32,6 +32,10 @@
  * @returns {Object} The object that holds all of the queries
  */
 export default function queryCreator(array, args) {
+    if(!args) {
+        return null;
+    }
+
     let query = {}
     array.forEach(element => {
         if(args[element[0]]) {
