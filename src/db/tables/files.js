@@ -1,7 +1,4 @@
-/**
- * dbMap.js
- * Sets the relationships between each table
- * 
+/*************************************************************************
  * License
  * The Library System Back End, handles all of the CRUD operations
  * of the CvSU Imus Library System
@@ -19,31 +16,35 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *************************************************************************/
+
+/**
+ * files.js
+ * Holds all of the pdf files
+ * 
+ * Columns:
+ * filename - The filename of the pdf file
+ * file_binaries - The files content turned into string
  */
 
-// Imports
-import DB from "./dbConn";
-import UsersTable from "./tables/users";
-import BooksTable from "./tables/books";
-import TransactionsTable from "./tables/transactions";
-import SessionsTable from "./tables/sessions";
-import BookViewsTable from "./tables/book_views";
-import FilesTable from "./tables/files";
+import {STRING, BLOB} from "sequelize";
+import DB from "../dbConn";
 
-// Many Books to One User
-UsersTable.hasMany(BooksTable);
-BooksTable.belongsTo(UsersTable);
-
-// Many Transactions to One User
-UsersTable.hasMany(TransactionsTable);
-TransactionsTable.belongsTo(UsersTable);
-
-// Many Transactions to One Book
-BooksTable.hasMany(TransactionsTable);
-TransactionsTable.belongsTo(BooksTable);
-
-// One Book to One BookViews
-BooksTable.hasOne(BookViewsTable);
-BookViewsTable.belongsTo(BooksTable);
-
-export default DB;
+export default DB.define("files", {
+    file_title: {
+        type: STRING,
+        allowNull: false
+    },
+    file_name: {
+        type: STRING,
+        allowNull: false
+    },
+    file_type: {
+        type: STRING,
+        allowNull: false
+    },
+    file_binaries: {
+        type: BLOB({length: "long"}),
+        allowNull: false
+    }
+});
