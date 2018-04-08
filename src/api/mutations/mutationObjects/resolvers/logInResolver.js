@@ -49,7 +49,7 @@ function resolve(root, args) {
 function verifyPasswordHashes(args, user) {
     if(compareSync(args.password, user.password)) {
         insertHashToDB(createHash(user));
-        return new UserResponse(true, 0, {token: createHash(user)});
+        return new UserResponse(true, 0, {token: createHash(user), position: user.userType});
     }
     
     return STATUS_CODES["11"];     
