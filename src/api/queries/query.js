@@ -24,6 +24,7 @@ import { GraphQLObjectType } from "graphql";
 import UsersQueryObject from "./queryObjects/users";
 import BooksQueryObject from "./queryObjects/books";
 import TransactionsQueryObject from "./queryObjects/transactions";
+import FilesQueryObject from "./queryObjects/files";
 
 export default new GraphQLObjectType({
     name: "Queries",
@@ -32,7 +33,8 @@ export default new GraphQLObjectType({
         return {
             Users: UsersQueryObject,
             Books: BooksQueryObject,
-            Transactions: TransactionsQueryObject
+            Transactions: TransactionsQueryObject,
+            Files: FilesQueryObject
         };
     }
 });
