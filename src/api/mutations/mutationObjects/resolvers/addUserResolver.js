@@ -64,6 +64,12 @@ function createUserAccount(args, accountType) {
     }
 }
 
+function createRegularUserAccount(args) {
+    return DB.models.users.create(new RegularUserDetails(args))
+    .then(accountCreatedResponse);
+}
+
+// TODO: Check if this function doesn't have any references
 function verifyAndCreateAccount(args, accountType) {
     if(accountType === 1) {
         return DB.models.users.create(new StaffUserDetails(args))
