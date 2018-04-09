@@ -22,6 +22,6 @@ export default {
         }
     },
     resolve(root, args) {
-        return DB.models.files.findAll({ where: { args } });
+        return DB.models.files.findAll({ where: args  });
     }
 }
