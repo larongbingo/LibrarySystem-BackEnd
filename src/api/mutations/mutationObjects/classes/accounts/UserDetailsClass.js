@@ -30,7 +30,7 @@ class UserDetails {
     constructor(args) {
         this.firstName = args.firstName
         this.lastName = args.lastName;
-        this.userId = args.userId;
+        this.userID = args.userID;
         this.isActive = true;
         this.username = args.username;
         this.password = args.password;
