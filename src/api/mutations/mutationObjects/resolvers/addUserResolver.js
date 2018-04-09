@@ -57,7 +57,7 @@ function accountCreatedResponse(user) {
  */
 function createUserAccount(args, accountType) {
     if(checkUsernames(args.username)) {
-        return verifyAndCreateAccount();
+        return verifyAndCreateAccount(args, accountType);
     }
     else {
         return STATUS_CODES["6"];
