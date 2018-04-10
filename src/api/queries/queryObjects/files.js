@@ -31,6 +31,6 @@ export default {
     },
     resolve(root, args) {
         let query = queryCreator(FIELDS, args);
-        return DB.models.files.findAll({ where: args  });
+        return DB.models.files.findAll({ where: query  });
     }
 }
