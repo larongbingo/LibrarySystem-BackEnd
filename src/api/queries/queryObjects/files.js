@@ -13,7 +13,7 @@ import queryCreator from "./helpers/queryCreator";
 
 const FIELDS = [
     ["id", Op.eq],
-    ["thesis_title", Op.like, percentify]
+    ["file_title", Op.like, percentify]
 ]
 
 export default {
@@ -24,7 +24,7 @@ export default {
             description: "The ID in the database",
             type: GraphQLInt
         },
-        thesis_title: {
+        file_title: {
             description: "The title of the dissertation",
             type: GraphQLString
         }
