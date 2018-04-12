@@ -32,6 +32,7 @@ import ReserveBookObject from "./mutationObjects/reserveBook";
 import UnreserveBookObject from "./mutationObjects/unreserveBook";
 import ChangeAccountInfoObject from "./mutationObjects/changeAccountInfo";
 import ChangeBookInfoObject from "./mutationObjects/changeBookInfo";
+import UpdateViewCounterObject from "./mutationObjects/updateViewCounter";
 
 process.env.SECRET_KEY = "This is a test for the super secret key";
 
@@ -49,7 +50,8 @@ export default new GraphQLObjectType({
             reserveBook: ReserveBookObject,
             unreserveBook: UnreserveBookObject,
             changeAccountInfo: ChangeAccountInfoObject,
-            changeBookInfo: ChangeBookInfoObject
+            changeBookInfo: ChangeBookInfoObject,
+            updateViewCounter: UpdateViewCounterObject
         };
     }
 });
