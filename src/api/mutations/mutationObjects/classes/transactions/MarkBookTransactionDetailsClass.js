@@ -21,9 +21,9 @@
 import TransactionDetails from "./TransactionDetailsClass";
 
 class MarkBookTransactionDetails extends TransactionDetails {
-    constructor(data, args, transactionType) {
-        super(transactionType, `user#${data.decoded.userId} -> #${args.bookId}`);
-        this.userId = data.decoded.userId;
+    constructor(args, transactionType) {
+        super(transactionType, `user#${args.userId} -> #${args.bookId}`);
+        this.userId = args.userId;
         this.bookId = args.bookId;
     }
 }
