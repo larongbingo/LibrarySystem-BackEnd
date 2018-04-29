@@ -48,8 +48,10 @@ function resolve(root, args) {
  */
 function verifyPasswordHashes(args, user) {
     if(compareSync(args.password, user.password)) {
-        insertHashToDB(createHash(user));
-        return new UserResponse(true, 0, {token: createHash(user), position: user.userType, id: user.id});
+        let hash = createHash(user);
+
+        insertHashToDB(hash);
+        return new UserResponse(true, 0, {token: hash, position: user.userType, id: user.id});
     }
     
     return STATUS_CODES["11"];     
