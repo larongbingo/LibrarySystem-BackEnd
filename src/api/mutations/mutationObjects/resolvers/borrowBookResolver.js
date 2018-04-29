@@ -120,8 +120,8 @@ function verifyAndUpdateBook(book, args) {
         return STATUS_MSG["17"];
     }
 
-    // Check if the book is not borrowed or reserved by anyone
-    else if(book.userId || book.isBorrowed) {
+    // Check if the book is not borrowed or reserved id is not the same as the one on the args object
+    else if(book.userId !== args.userId || book.isBorrowed) {
         return STATUS_MSG["13"];
     }
 
