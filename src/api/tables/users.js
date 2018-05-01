@@ -73,7 +73,7 @@ export default new GraphQLObjectType({
                 description: "The books borrowed by the user",
                 type: new GraphQLList(BooksObject),
                 resolve(user) {
-                    user.getBooks();
+                    return user.getBooks();
                 }
             }
         };
