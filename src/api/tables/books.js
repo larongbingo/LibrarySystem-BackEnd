@@ -27,6 +27,7 @@ import {
     GraphQLObjectType,
     GraphQLBoolean
 } from "graphql";
+import User from "../tables/users";
 
 export default new GraphQLObjectType({
     name: "Book",
@@ -68,11 +69,11 @@ export default new GraphQLObjectType({
                     return book.isBorrowed;
                 }
             },
-            userId: {
-                description: "The user id that borrowed the book",
-                type: GraphQLInt,
+            user: {
+                description: "The details of the user",
+                type: User,
                 resolve(book) {
-                    return book.userId;
+                    return book.getUser();
                 }
             }
         };
