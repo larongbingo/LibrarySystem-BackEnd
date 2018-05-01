@@ -22,7 +22,7 @@ import TransactionDetails from "./TransactionDetailsClass";
 
 class StaffBorrowReturnTransactionDetails extends TransactionDetails {
     constructor(args, transactionType) {
-        super(TRANSACTION_TYPE_BORROWING, args.transactionRemarks);
+        super(transactionType, args.transactionRemarks);
         this.userId = args.userId;
         this.bookId = args.userId;
     }
