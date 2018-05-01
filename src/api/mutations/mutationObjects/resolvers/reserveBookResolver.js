@@ -89,7 +89,7 @@ function updateReservesCount(bookView) {
 function insertTransactionObjectToDB(DB, data, args) {
     // Create a record to transactions table
     return DB.models.transactions.create(
-        new MarkBookTransactionDetails(data, args, "RESERVE BOOK")
+        new MarkBookTransactionDetails(args, "RESERVE BOOK")
     )
     .then(transaction => {
         return new UserResponse(true, 0, {
