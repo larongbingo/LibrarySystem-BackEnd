@@ -69,6 +69,13 @@ export default new GraphQLObjectType({
                     return book.isBorrowed;
                 }
             },
+            userId: {
+                description: "The user id that borrowed the book",
+                type: GraphQLInt,
+                resolve(book) {
+                    return book.userId;
+                }
+            },
             user: {
                 description: "The details of the user",
                 type: User,
