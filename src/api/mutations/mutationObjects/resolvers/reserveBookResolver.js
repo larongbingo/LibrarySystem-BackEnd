@@ -87,6 +87,11 @@ function updateReservesCount(bookView) {
  * @returns {UserResponse} The object that represents a message to the user
  */
 function insertTransactionObjectToDB(DB, data, args) {
+    let object = {
+        bookId: args.bookId,
+        userId: data.userId
+    }
+
     // Create a record to transactions table
     return DB.models.transactions.create(
         new MarkBookTransactionDetails(args, "RESERVE BOOK")
