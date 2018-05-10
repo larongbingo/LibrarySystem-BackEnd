@@ -35,7 +35,7 @@ export class Session extends Model<Session> {
                         resolve(null);
                         return;
                     }
-
+                    
                     resolve(sign(user, process.env.KEY));
                 })
             })
