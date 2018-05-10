@@ -1,98 +1,180 @@
-const path = require("path");
-const webpack = require("webpack");
+/*************************************************************************
+ * License
+ * The Library System Back End, handles all of the CRUD operations
+ * of the CvSU Imus Library System
+ * Copyright (C) 2018  Renz Christen Yeomer A. Pagulayan
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *************************************************************************/
 
-// if NODE_ENV is null, turn the entire project as development
-if(!process.env.NODE_ENV) {
-    process.env.NODE_ENV = "development";
-}
+var path = require("path");
+var webpack = require('webpack');
 
-let defaultConfig = {
-    mode: process.env.NODE_ENV,
-    entry: {
-        "index": "./src/index.ts"
+module.exports = [
+    // Server
+    {
+        name: "API Server",
+        entry: "./src/index.js",
+        output: {
+            path: path.resolve(__dirname, "build"),
+            filename: "index.js"
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js?$/,
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            "env",
+                            ["es2015", {"modules": false}]
+                        ]
+                    },
+                    exclude: /node_modules/
+                }
+            ]
+        },
+        plugins: [
+           /* new webpack.optimize.UglifyJsPlugin({
+                parallel: {
+                    cache: true,
+                    workers: true
+                },
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    ecma: 5,
+                    compress: true,
+                    mangle: true
+                }
+            }),*/
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                "process.env.DB_HOSTNAME": JSON.stringify(process.env.DB_HOSTNAME),
+                "process.env.DB_PORT": JSON.stringify(process.env.DB_PORT),
+                "process.env.DB_PASSWORD": JSON.stringify(process.env.DB_PASSWORD),
+                "process.env.DB_USERNAME": JSON.stringify(process.env.DB_USERNAME)
+            })
+        ],
+        target: "node",
+        cache: true,
+        stats: "verbose", 
+        devtool: "source-map",
+        externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore']
     },
-    output: {
-        path: path.resolve(__dirname, "build")
-    },
-    module: {
-        rules: [
-            {
-                test: /\.ts?$/,
-                use: "ts-loader",
-                exclude: [
-                    path.resolve(__dirname, "/node_modules"),
-                    /node_modules/
-                ]
-            }
-        ]
-    },
-    resolve: {
-        extensions: [".ts", ".js"],
-        alias: {
-            "database": path.resolve(__dirname, "src/database"),
-            "helpers": path.resolve(__dirname, "src/helpers"),
-            "routes": path.resolve(__dirname, "src/routes"),
-            "graphql": path.resolve(__dirname, "src/graphql"),
-            "tests": path.resolve(__dirname, "src/tests")
-        }
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            "process.env.KEY": JSON.stringify("THIS IS A VERY SECRET PASSWORD!!")
-        })
-    ],
-    target: "node",
-    externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore'],
-    cache: true
-}
 
-let testingConfig = {
-    mode: "development",
-    entry: {
-        "test": "./src/tests/tests.ts"
+    // Sync DB
+    {
+        name: "syncDB",
+        entry: "./src/lib/syncDB.js",
+        output: {
+            path: path.resolve(__dirname, "build"),
+            filename: "syncDB.js"
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js?$/,
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            "env",
+                            ["es2015", {"modules": false}]
+                        ]
+                    },
+                    exclude: /node_modules/
+                }
+            ]
+        },
+        plugins: [
+           /* new webpack.optimize.UglifyJsPlugin({
+                parallel: {
+                    cache: true,
+                    workers: true
+                },
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    ecma: 5,
+                    compress: true,
+                    mangle: true
+                }
+            }),*/
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                "process.env.DB_HOSTNAME": JSON.stringify(process.env.DB_HOSTNAME),
+                "process.env.DB_PORT": JSON.stringify(process.env.DB_PORT),
+                "process.env.DB_PASSWORD": JSON.stringify(process.env.DB_PASSWORD),
+                "process.env.DB_USERNAME": JSON.stringify(process.env.DB_USERNAME)
+            })
+        ],
+        target: "node",
+        cache: true,
+        stats: "verbose", 
+        devtool: "source-map",
+        externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore']
     },
-    output: {
-        path: path.resolve(__dirname, "build")
-    },
-    module: {
-        rules: [
-            {
-                test: /\.ts?$/,
-                use: "ts-loader",
-                exclude: [
-                    path.resolve(__dirname, "/node_modules"),
-                    /node_modules/
-                ]
-            }
-        ]
-    },
-    resolve: {
-        extensions: [".ts", ".js"],
-        alias: {
-            "database": path.resolve(__dirname, "src/database"),
-            "helpers": path.resolve(__dirname, "src/helpers"),
-            "routes": path.resolve(__dirname, "src/routes"),
-            "graphql": path.resolve(__dirname, "src/graphql"),
-            "tests": path.resolve(__dirname, "src/tests")
-        }
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("testing"),
-            "process.env.KEY": JSON.stringify("THIS IS A VERY SECRET PASSWORD!!")
-        })
-    ],
-    target: "node",
-    externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore'],
-    cache: true,
-    parallelism: 4,
-    profile: true
-}
 
-// Add the following if the environment is for development
-if(process.env.NODE_ENV === "development") {
-    defaultConfig.entry["syncTables"] = "./src/scripts/syncTables.ts";
-}
-
-module.exports = [defaultConfig, testingConfig];
+    // Generate Random Data
+    {
+        name: "dbRand",
+        entry: "./src/lib/genRandData.js",
+        output: {
+            path: path.resolve(__dirname, "build"),
+            filename: "genRandData.js"
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js?$/,
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            "env",
+                            ["es2015", {"modules": false}]
+                        ]
+                    },
+                    exclude: /node_modules/
+                }
+            ]
+        },
+        plugins: [
+           /* new webpack.optimize.UglifyJsPlugin({
+                parallel: {
+                    cache: true,
+                    workers: true
+                },
+                cache: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    ecma: 5,
+                    compress: true,
+                    mangle: true
+                }
+            }),*/
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                "process.env.DB_HOSTNAME": JSON.stringify(process.env.DB_HOSTNAME),
+                "process.env.DB_PORT": JSON.stringify(process.env.DB_PORT),
+                "process.env.DB_PASSWORD": JSON.stringify(process.env.DB_PASSWORD),
+                "process.env.DB_USERNAME": JSON.stringify(process.env.DB_USERNAME)
+            })
+        ],
+        target: "node",
+        cache: true,
+        stats: "verbose", 
+        devtool: "source-map",
+        externals: ['pg', 'sqlite3', 'tedious', 'pg-hstore']
+    }
+]
