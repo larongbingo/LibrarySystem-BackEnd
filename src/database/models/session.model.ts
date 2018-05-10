@@ -14,9 +14,9 @@ export class Session extends Model<Session> {
      * Adds a new hash if the given credentials are valid
      * @param username The username of the account
      * @param password_hash The password of the account
-     * @returns true if the credentials are valid, false otherwise
+     * @returns returns a string if the credentials are valid, returns null if otherwise
      */
-    public static LogIn(username: string, password_hash: string): Bluebird<boolean> {
+    public static LogIn(username: string, password_hash: string): Bluebird<string | null> {
         return new Bluebird(function(resolve, reject) {
             return User.findOne({
                 where: {
@@ -25,20 +25,19 @@ export class Session extends Model<Session> {
             })
             .then(user => {
                 if(!user) {
-                    resolve(false);
+                    resolve(null);
                     return;
                 }
 
-                compare(user.password, password_hash)
-                .then((isSame) => {
-                    if(isSame) {
-                        let token = sign(user, process.env.KEY);
-                        Session.create({sessionToken: token});
+                compare(password_hash, user.password)
+                .then(isSame => {
+                    if(!isSame) {
+                        resolve(null);
+                        return;
                     }
 
-                    return isSame;
+                    resolve(sign(user, process.env.KEY));
                 })
-                .then(resolve);
             })
             .catch(reject);
         });
