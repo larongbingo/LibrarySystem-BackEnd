@@ -70,6 +70,23 @@ export class Session extends Model<Session> {
             .catch(reject);
         });
     }
+
+    /**
+     * Checks if the given hash is stored in the Sessions Table/Model
+     * @param sessionToken The token that needs to be validated
+     */
+    public static VerifyToken(sessionToken: string): Bluebird<boolean> {
+        return new Bluebird(function(resolve, reject) {
+            return Session
+            .findOne({
+                where: {
+                    sessionToken: sessionToken
+                }
+            })
+            .then(session => resolve(Boolean(session)))
+            .catch(reject);
+        });
+    }
 }
 
 export default Session;
