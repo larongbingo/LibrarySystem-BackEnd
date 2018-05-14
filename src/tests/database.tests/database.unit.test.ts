@@ -16,12 +16,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-import sequelize from "database";
+import sequelize, { Session } from "database";
 
 describe("Database Unit Tests", function() {
     before("Sync Tables and Models", function() {
         return sequelize.sync({ force: true });
     });
 
-    
+    describe("Session Model Functions", function() {
+        describe("LogIn", function() {
+            
+        });
+
+        describe("LogOut", function() {
+
+        });
+
+        describe("VerifyToken", function() {
+
+        });
+    });
 });
