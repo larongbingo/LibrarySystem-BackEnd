@@ -17,46 +17,33 @@
  ****************************************************************************/
 
 import { Table, Model, Column, DataType, AllowNull } from "sequelize-typescript";
+import { ITransaction } from "./types";
 
 /**
  * Holds all of the changes in all models
  */
 @Table({ paranoid: true, timestamps: true })
-export class Transaction extends Model<Transaction> {
-    /**
-     * The Database ID of the user that was involved in the transaction
-     */
+export class Transaction extends Model<Transaction> implements ITransaction {
+
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    protected userID!: number;
+    userID!: number;
 
-    /**
-     * The Database ID of the book that was involved in the transaction
-     */
     @AllowNull(true)
     @Column(DataType.INTEGER)
-    protected bookID!: number;
+    bookID!: number;
 
-    /**
-     * The Database ID of the admin user that processes the user
-     */
     @AllowNull(true)
     @Column(DataType.INTEGER)
-    protected adminUserID!: number;
+    adminUserID!: number;
     
-    /**
-     * The title of the transaction that happened
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
-    protected type!: string;
+    type!: string;
 
-    /**
-     * Remark or comment of the transaction
-     */
     @AllowNull(true)
     @Column(DataType.STRING)
-    protected comment!: string;
+    comment!: string;
 }
 
 export default Transaction;

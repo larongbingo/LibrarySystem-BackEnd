@@ -18,12 +18,13 @@
 
 import { Model, Column, Table, DataType, AllowNull } from "sequelize-typescript";
 import * as Bluebird from "bluebird";
+import { ISession } from "./types";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import User from "./user.model";
 
 @Table({ timestamps: true })
-export class Session extends Model<Session> {
+export class Session extends Model<Session> implements ISession {
     @AllowNull(false)
     @Column(DataType.STRING)
     sessionToken!: string;

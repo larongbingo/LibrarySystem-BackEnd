@@ -17,6 +17,7 @@
  ****************************************************************************/
 
 import { Model, Table, Column, DataType, AllowNull, Default } from "sequelize-typescript";
+import { IBook } from "./types";
 import User from "./user.model";
 import * as Bluebird from "bluebird";
 
@@ -24,45 +25,30 @@ import * as Bluebird from "bluebird";
  * Holds the details of all books
  */
 @Table({ paranoid: true, timestamps: true })
-export class Book extends Model<Book> {
+export class Book extends Model<Book> implements IBook {
     //#region Columns
 
-    /**
-     * The title of the book
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
     title!: string;
 
-    /**
-     * The author of the book
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
     author!: string;
 
-    /**
-     * The classification of the book
-     */
     @AllowNull(true)
     @Column(DataType.STRING)
     classification!: string;
 
-    /**
-     * The DATABASE ID of the user that borrowed or reserved the book
-     */
     @AllowNull(true)
     @Default(null)
     @Column(DataType.STRING)
-    protected userID!: number;
+    userID!: number;
 
-    /**
-     * A flag that indicates if the book is borrowed
-     */
     @AllowNull(false)
     @Default(false)
     @Column(DataType.BOOLEAN)
-    protected isBorrowed: boolean;
+    isBorrowed: boolean;
 
     //#endregion
 

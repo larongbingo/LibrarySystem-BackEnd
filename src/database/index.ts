@@ -19,4 +19,5 @@
 import sequelize from "./sequelize";
 export * from "./models";
 export * from "./sequelize";
+export * from "./models/types";
 export default sequelize;

@@ -18,52 +18,36 @@
 
 import { Model, Column, Table, DataType, BeforeCreate, BeforeUpdate, AllowNull, HasMany, BeforeValidate, Length } from "sequelize-typescript";
 import { hashSync } from "bcryptjs";
+import { IUser } from "./types";
 import * as Bluebird from "bluebird";
 
 /**
  * Holds the details of all students and staffs
  */
 @Table({ paranoid: true, timestamps: true })
-export class User extends Model<User> {
-    /**
-     * The First Name of the user
-     */
+export class User extends Model<User> implements IUser {
+
     @AllowNull(false)
     @Column(DataType.STRING)
     firstName!: string;
     
-    /**
-     * The Last Name of the user
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
     lastName!: string;
 
-    /**
-     * The email addresss of the user
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
     email!: string;
 
-    /**
-     * The account type of the account
-     */
     @AllowNull(false)
     @Column(DataType.ENUM({values: ["STUDENT", "STAFF", "ADMIN"]}))
     accountType!: string;
 
-    /**
-     * The username of the account
-     */
     @AllowNull(false)
     @Length({min: 8})
     @Column(DataType.STRING)
     username!: string;
 
-    /**
-     * The HASHED password of the account
-     */
     @AllowNull(false)
     @Column(DataType.STRING)
     hashed_password!: string; 
