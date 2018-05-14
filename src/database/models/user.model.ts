@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-import { Model, Column, Table, DataType, BeforeValidate, AllowNull, HasMany } from "sequelize-typescript";
+import { Model, Column, Table, DataType, BeforeCreate, BeforeUpdate, AllowNull, HasMany, BeforeValidate, Length } from "sequelize-typescript";
 import { hashSync } from "bcryptjs";
 import * as Bluebird from "bluebird";
 
@@ -57,6 +57,7 @@ export class User extends Model<User> {
      * The username of the account
      */
     @AllowNull(false)
+    @Length({min: 8})
     @Column(DataType.STRING)
     username!: string;
 
@@ -71,6 +72,8 @@ export class User extends Model<User> {
      * Hashes the password to a Bcrypt Hash
      * @param instance The user of the account
      */
+    @BeforeCreate
+    @BeforeUpdate
     @BeforeValidate
     private static HashPassword(instance: User): void {
         instance.hashed_password = hashSync(instance.hashed_password + instance.username + instance.id);
