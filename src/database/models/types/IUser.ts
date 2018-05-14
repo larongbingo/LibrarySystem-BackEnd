@@ -21,7 +21,7 @@ export interface IUser {
     /**
      * The account type of the account
      */
-    accountType: string;
+    accountType?: string;
 
     /**
      * The username of the account
