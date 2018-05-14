@@ -47,14 +47,19 @@ export class Session extends Model<Session> {
                     return;
                 }
 
-                compare(password_hash, user.password)
+                compare(password_hash, user.hashed_password)
                 .then(isSame => {
                     if(!isSame) {
                         resolve(null);
                         return;
                     }
 
-                    resolve(sign(user, process.env.KEY));
+                    let token = sign(user, process.env.KEY)
+
+                    Session
+                    .create({sessionToken: token})
+                    .then(() => resolve(token))
+                    .catch(reject);
                 })
             })
             .catch(reject);
