@@ -65,7 +65,7 @@ export class User extends Model<User> {
      */
     @AllowNull(false)
     @Column(DataType.STRING)
-    password!: string;
+    hashed_password!: string; 
 
     /**
      * Hashes the password to a Bcrypt Hash
@@ -73,7 +73,7 @@ export class User extends Model<User> {
      */
     @BeforeValidate
     private static HashPassword(instance: User): void {
-        instance.password = hashSync(instance.password + instance.username + instance.id);
+        instance.hashed_password = hashSync(instance.hashed_password + instance.username + instance.id);
     }
 }
 
