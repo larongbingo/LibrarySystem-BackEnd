@@ -5,7 +5,7 @@
   "main": "./build/index.js",
   "scripts": {
     "test": "mocha ./build/test.js --exit",
-    "build": "webpack",
+    "build": "babel ./src --out-dir build --extensions \".ts\"",
     "start": "node ./build/index.js",
     "db-cli": "mysql -u root -proot library_system_ts_db",
     "sync-db": "node ./build/syncTables"
