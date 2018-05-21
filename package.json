@@ -4,7 +4,7 @@
   "description": "The backend server of the library system",
   "main": "./build/index.js",
   "scripts": {
-    "test": "mocha ./build/test.js --exit",
+    "test": "mocha ./build/tests/test.js --exit",
     "prebuild": "rimraf ./build",
     "build": "babel ./src --out-dir build --extensions \".ts\"",
     "start": "node ./build/index.js",
