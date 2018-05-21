@@ -5,6 +5,7 @@
   "main": "./build/index.js",
   "scripts": {
     "test": "mocha ./build/test.js --exit",
+    "prebuild": "rimraf ./build",
     "build": "babel ./src --out-dir build --extensions \".ts\"",
     "start": "node ./build/index.js",
     "db-cli": "mysql -u root -proot library_system_ts_db",
@@ -34,6 +35,7 @@
     "faker": "^4.1.0",
     "lodash": "^4.17.10",
     "mocha": "^5.1.1",
+    "rimraf": "^2.6.2",
     "sequelize-typescript": "^0.6.4",
     "typescript": "^2.8.3"
   },
