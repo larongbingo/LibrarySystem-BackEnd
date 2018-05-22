@@ -60,7 +60,7 @@ export class User extends Model<User> implements IUser {
     @BeforeUpdate
     @BeforeValidate
     private static HashPassword(instance: User): void {
-        instance.hashed_password = hashSync(instance.hashed_password + instance.username + instance.id);
+        instance.hashed_password = hashSync(String(instance.dataValues.hashed_password) + String(instance.dataValues.username) + String(instance.dataValues.id));
     }
 }
 
